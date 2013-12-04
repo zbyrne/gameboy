@@ -50,6 +50,7 @@ z80_suite(void)
     tcase_add_test(tc_core, test_z80_reset);
  */
     tcase_add_test(tc_core, test_z80_reset);
+    tcase_add_test(tc_core, test_nop);
     suite_add_tcase(s, tc_core);
     return s;
 }
