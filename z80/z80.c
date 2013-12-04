@@ -17,8 +17,6 @@ z80_reset(pZ80_t proc)
     proc->registers.f = 0;
     proc->registers.pc = 0;
     proc->registers.sp = 0;
-    proc->registers.m = 0;
-    proc->registers.t = 0;
     proc->registers.ime = 1;
     proc->clocks.m = 0;
     proc->clocks.t = 0;

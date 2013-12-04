@@ -24,8 +24,6 @@ START_TEST(test_z80_reset)
     ck_assert_int_eq(proc.registers.f, 0);
     ck_assert_int_eq(proc.registers.pc, 0);
     ck_assert_int_eq(proc.registers.sp, 0);
-    ck_assert_int_eq(proc.registers.m, 0);
-    ck_assert_int_eq(proc.registers.t, 0);
     ck_assert_int_eq(proc.registers.ime, 1);
     ck_assert_int_eq(proc.clocks.m, 0);
     ck_assert_int_eq(proc.clocks.t, 0);

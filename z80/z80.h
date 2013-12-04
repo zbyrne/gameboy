@@ -13,8 +13,6 @@ typedef struct{
   uint8_t f;
   uint16_t pc;
   uint16_t sp;
-  uint16_t m;
-  uint16_t t;
   uint8_t ime;
 } Z80Registers, *pZ80Registers;
 
