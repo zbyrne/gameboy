@@ -30,6 +30,16 @@ START_TEST(test_z80_reset)
 }
 END_TEST
 
+START_TEST(test_nop)
+{
+    Z80_t proc;
+    Z80Clocks_t clocks = NOP(&proc);
+    ck_assert_int_eq(clocks.m, 1);
+    ck_assert_int_eq(clocks.t, 4);
+}
+END_TEST
+
+
 Suite *
 z80_suite(void)
 {

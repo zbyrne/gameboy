@@ -21,3 +21,13 @@ z80_reset(pZ80_t proc)
     proc->clocks.m = 0;
     proc->clocks.t = 0;
 }
+
+/*
+ * Do nothing, and increment the clocks.
+ */
+Z80Clocks_t
+NOP(pZ80_t proc)
+{
+    Z80Clocks_t rtn = {1, 4};
+    return rtn;
+}
