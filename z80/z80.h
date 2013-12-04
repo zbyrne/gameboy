@@ -41,6 +41,7 @@ void z80_decode(pZ80_t);
 /* Opcode Function Definitions */
 /* 0x0 */
 Z80Clocks_t NOP(pZ80_t);
+Z80Clocks_t LD_BC_imm(pZ80_t);
 /* 0x1 */
 /* 0x2 */
 /* 0x3 */

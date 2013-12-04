@@ -31,3 +31,13 @@ NOP(pZ80_t proc)
     Z80Clocks_t rtn = {1, 4};
     return rtn;
 }
+
+/*
+ * Load 16-bit immediate value into BC
+ */
+Z80Clocks_t
+LD_BC_imm(pZ80_t proc)
+{
+    Z80Clocks_t rtn = {3, 12};
+    return rtn;
+}

@@ -39,6 +39,18 @@ START_TEST(test_nop)
 }
 END_TEST
 
+START_TEST(test_ld_bc_imm)
+{
+    Z80_t proc;
+    proc.registers.b = 0;
+    proc.registers.c = 0;
+    Z80Clocks_t clocks = LD_BC_imm(&proc);
+    ck_assert_int_eq(clocks.m, 3);
+    ck_assert_int_eq(clocks.t, 12);
+    uint16_t result = (proc.registers.b << 8) + proc.registers.c;
+    ck_assert_int_eq(result, 0xFEFE);
+}
+END_TEST
 
 Suite *
 z80_suite(void)
@@ -51,6 +63,7 @@ z80_suite(void)
  */
     tcase_add_test(tc_core, test_z80_reset);
     tcase_add_test(tc_core, test_nop);
+    tcase_add_test(tc_core, test_ld_bc_imm);
     suite_add_tcase(s, tc_core);
     return s;
 }
