@@ -14,18 +14,18 @@ typedef struct{
   uint16_t pc;
   uint16_t sp;
   uint8_t ime;
-} Z80Registers, *pZ80Registers;
+} Z80Registers_t, *pZ80Registers_t;
 
 /* Clock Type */
 typedef struct{
   uint16_t m;
   uint16_t t;
-} Z80Clocks, *pZ80Clocks;
+} Z80Clocks_t, *pZ80Clocks_t;
 
 /* Processor Type */
 typedef struct{
-  Z80Registers registers;
-  Z80Clocks clocks;
+  Z80Registers_t registers;
+  Z80Clocks_t clocks;
 } Z80_t, *pZ80_t;
 
 /* Status Register Masks */
@@ -35,7 +35,26 @@ typedef struct{
 #define Z80_CARRY 0x10
 
 /* Function Definitions */
-void z80_reset(pZ80_t proc);
-void z80_decode(pZ80_t proc);
+void z80_reset(pZ80_t);
+void z80_decode(pZ80_t);
+
+/* Opcode Function Definitions */
+/* 0x0 */
+Z80Clocks_t NOP(pZ80_t);
+/* 0x1 */
+/* 0x2 */
+/* 0x3 */
+/* 0x4 */
+/* 0x5 */
+/* 0x6 */
+/* 0x7 */
+/* 0x8 */
+/* 0x9 */
+/* 0xA */
+/* 0xB */
+/* 0xC */
+/* 0xD */
+/* 0xE */
+/* 0xF */
 
 #endif
