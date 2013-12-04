@@ -44,11 +44,13 @@ START_TEST(test_ld_bc_imm)
     Z80_t proc;
     proc.registers.b = 0;
     proc.registers.c = 0;
+    proc.registers.pc = 0;
     Z80Clocks_t clocks = LD_BC_imm(&proc);
     ck_assert_int_eq(clocks.m, 3);
     ck_assert_int_eq(clocks.t, 12);
     uint16_t result = (proc.registers.b << 8) + proc.registers.c;
     ck_assert_int_eq(result, 0xFEFE);
+    ck_assert_int_eq(proc.registers.pc, 2);
 }
 END_TEST
 
