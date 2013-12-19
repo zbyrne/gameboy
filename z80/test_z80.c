@@ -39,6 +39,12 @@ START_TEST(test_nop)
 }
 END_TEST
 
+uint8_t
+mem_read(uint16_t addr)
+{
+    return 0xF0 + addr;
+}
+
 START_TEST(test_ld_bc_imm)
 {
     Z80_t proc;
@@ -49,7 +55,7 @@ START_TEST(test_ld_bc_imm)
     ck_assert_int_eq(clocks.m, 3);
     ck_assert_int_eq(clocks.t, 12);
     uint16_t result = (proc.registers.b << 8) + proc.registers.c;
-    ck_assert_int_eq(result, 0xFEFE);
+    ck_assert_int_eq(result, 0xF1F2);
     ck_assert_int_eq(proc.registers.pc, 2);
 }
 END_TEST

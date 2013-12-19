@@ -1,6 +1,9 @@
 #include <stdint.h>
 #include "z80.h"
 
+extern uint8_t mem_read(uint16_t);
+extern void mem_write(uint16_t, uint8_t);
+
 /*
  * Reset the z80 struct to power on state.
  */
@@ -38,8 +41,8 @@ NOP(pZ80_t proc)
 Z80Clocks_t
 LD_BC_imm(pZ80_t proc)
 {
-    /* TODO: load value from memory @ pc */
-    /* TODO: increment program counter */
+    proc->registers.b = mem_read(++proc->registers.pc);
+    proc->registers.c = mem_read(++proc->registers.pc);
     Z80Clocks_t rtn = {3, 12};
     return rtn;
 }
