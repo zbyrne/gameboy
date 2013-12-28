@@ -48,13 +48,13 @@ LD_BC_imm(pZ80_t proc)
 }
 
 /*
- * Load 8-bit immediate value into address in BC
+ * Load value in A into address in BC
  */
 Z80Clocks_t
-LD_BC_ind_imm(pZ80_t proc)
+LD_BC_ind_A(pZ80_t proc)
 {
     uint16_t addr = (proc->registers.b << 8) + proc->registers.c;
-    mem_write(addr, mem_read(++proc->registers.pc));
+    mem_write(addr, proc->registers.a);
     Z80Clocks_t rtn = {2, 8};
     return rtn;
 }

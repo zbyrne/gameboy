@@ -60,7 +60,7 @@ START_TEST(test_ld_bc_imm)
 }
 END_TEST
 
-uint8_t ram[256] = {0};
+uint8_t ram[1024] = {0};
 
 void
 mem_write(uint16_t addr, uint8_t val)
@@ -68,17 +68,18 @@ mem_write(uint16_t addr, uint8_t val)
     ram[addr] = val;
 }
 
-START_TEST(test_ld_bc_ind_imm)
+START_TEST(test_ld_bc_ind_a)
 {
     Z80_t proc;
-    proc.registers.b = 0;
-    proc.registers.c = 0xF;
+    proc.registers.a = 0xAA;
+    proc.registers.b = 0x1;
+    proc.registers.c = 0xC;
     proc.registers.pc = 0;
-    Z80Clocks_t clocks = LD_BC_ind_imm(&proc);
+    Z80Clocks_t clocks = LD_BC_ind_A(&proc);
     ck_assert_int_eq(clocks.m, 2);
     ck_assert_int_eq(clocks.t, 8);
-    ck_assert_int_eq(ram[0xF], 0xF1);
-    ck_assert_int_eq(proc.registers.pc, 1);
+    ck_assert_int_eq(ram[0x10C], 0xAA);
+    ck_assert_int_eq(proc.registers.pc, 0);
 }
 END_TEST
 
@@ -95,6 +96,7 @@ z80_ld_suite(void)
     tcase_add_test(tc_core, test_z80_reset);
     tcase_add_test(tc_core, test_nop);
     tcase_add_test(tc_core, test_ld_bc_imm);
+    tcase_add_test(tc_core, test_ld_bc_ind_a);
     suite_add_tcase(s, tc_core);
     return s;
 }
