@@ -60,6 +60,29 @@ START_TEST(test_ld_bc_imm)
 }
 END_TEST
 
+uint8_t ram[256] = {0};
+
+void
+mem_write(uint16_t addr, uint8_t val)
+{
+    ram[addr] = val;
+}
+
+START_TEST(test_ld_bc_ind_imm)
+{
+    Z80_t proc;
+    proc.registers.b = 0;
+    proc.registers.c = 0xF;
+    proc.registers.pc = 0;
+    Z80Clocks_t clocks = LD_BC_ind_imm(&proc);
+    ck_assert_int_eq(clocks.m, 2);
+    ck_assert_int_eq(clocks.t, 8);
+    ck_assert_int_eq(ram[0xF], 0xF1);
+    ck_assert_int_eq(proc.registers.pc, 1);
+}
+END_TEST
+
+
 Suite *
 z80_suite(void)
 {
