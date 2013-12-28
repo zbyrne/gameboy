@@ -84,9 +84,9 @@ END_TEST
 
 
 Suite *
-z80_suite(void)
+z80_ld_suite(void)
 {
-    Suite *s = suite_create("z80");
+    Suite *s = suite_create("z80_Load");
     TCase *tc_core = tcase_create("Core");
 /*
   And are added here, like this
@@ -103,7 +103,7 @@ int
 main(void)
 {
     int number_failed;
-    Suite *s = z80_suite ();
+    Suite *s = z80_ld_suite ();
     SRunner *sr = srunner_create (s);
     srunner_run_all (sr, CK_NORMAL);
     number_failed = srunner_ntests_failed (sr);
