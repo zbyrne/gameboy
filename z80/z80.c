@@ -119,23 +119,9 @@ Z80Clocks_t
 INC_B(pZ80_t proc)
 {
     uint8_t val = proc->registers.b + 1;
-    proc->registers.f &= ~Z80_SUB_OP;
-    if (val == 0)
-    {
-        proc->registers.f |= Z80_ZERO;
-    }
-    else
-    {
-        proc->registers.f &= ~Z80_ZERO;
-    }
-    if ((proc->registers.b & 0xF) + 1 >= 0x10)
-    {
-        proc->registers.f |= Z80_HALF_CARRY;
-    }
-    else
-    {
-        proc->registers.f &= ~Z80_HALF_CARRY;
-    }
+    z80_set_sub_op(proc, 0);
+    z80_set_zero(proc, (val == 0 ? 1 : 0));
+    z80_set_half_carry(proc, ((proc->registers.b & 0xF) + 1 >= 0x10 ? 1 : 0));
     proc->registers.b = val;
     Z80Clocks_t rtn = {1, 4};
     return rtn;
@@ -148,23 +134,9 @@ Z80Clocks_t
 DEC_B(pZ80_t proc)
 {
     uint8_t val = proc->registers.b - 1;
-    proc->registers.f |= Z80_SUB_OP;
-    if (val == 0)
-    {
-        proc->registers.f |= Z80_ZERO;
-    }
-    else
-    {
-        proc->registers.f &= ~Z80_ZERO;
-    }
-    if ((proc->registers.b & 0xF0) > (val & 0xF0))
-    {
-        proc->registers.f |= Z80_HALF_CARRY;
-    }
-    else
-    {
-        proc->registers.f &= ~Z80_HALF_CARRY;
-    }
+    z80_set_sub_op(proc, 1);
+    z80_set_zero(proc, (val == 0 ? 1 : 0));
+    z80_set_half_carry(proc, ((proc->registers.b & 0xF0) > (val & 0xF0) ? 1 : 0));
     proc->registers.b = val;
     Z80Clocks_t rtn = {1, 4};
     return rtn;
@@ -189,23 +161,10 @@ RLC_A(pZ80_t proc)
 {
     uint8_t carry = proc->registers.a & 0x80 ? 1 : 0;
     uint8_t val = (proc->registers.a << 1) + carry;
-    proc->registers.f &= ~(Z80_SUB_OP | Z80_HALF_CARRY);
-    if (val == 0)
-    {
-        proc->registers.f |= Z80_ZERO;
-    }
-    else
-    {
-        proc->registers.f &= ~Z80_ZERO;
-    }
-    if (carry)
-    {
-        proc->registers.f |= Z80_CARRY;
-    }
-    else
-    {
-        proc->registers.f &= ~Z80_CARRY;
-    }
+    z80_set_sub_op(proc, 0);
+    z80_set_zero(proc, (val == 0 ? 1 : 0));
+    z80_set_half_carry(proc, 0);
+    z80_set_carry(proc, carry);
     proc->registers.a = val;
     Z80Clocks_t rtn = {1, 4};
     return rtn;
