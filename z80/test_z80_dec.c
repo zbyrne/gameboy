@@ -57,7 +57,7 @@ END_TEST
 Suite *
 z80_dec_suite(void)
 {
-    Suite *s = suite_create("z80_Deccrement");
+    Suite *s = suite_create("z80_Decrement");
     TCase *tc_core = tcase_create("Core");
 /*
   And are added here, like this
