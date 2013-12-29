@@ -100,3 +100,32 @@ INC_B(pZ80_t proc)
     Z80Clocks_t rtn = {1, 4};
     return rtn;
 }
+
+/*
+ * Decrement the value of B
+ */
+Z80Clocks_t
+DEC_B(pZ80_t proc)
+{
+    uint8_t val = proc->registers.b - 1;
+    proc->registers.f |= Z80_SUB_OP;
+    if (val == 0)
+    {
+        proc->registers.f |= Z80_ZERO;
+    }
+    else
+    {
+        proc->registers.f &= ~Z80_ZERO;
+    }
+    if ((proc->registers.b & 0xF0) > (val & 0xF0))
+    {
+        proc->registers.f |= Z80_HALF_CARRY;
+    }
+    else
+    {
+        proc->registers.f &= ~Z80_HALF_CARRY;
+    }
+    proc->registers.b = val;
+    Z80Clocks_t rtn = {1, 4};
+    return rtn;
+}
