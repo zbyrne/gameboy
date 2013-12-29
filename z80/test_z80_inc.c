@@ -64,7 +64,6 @@ START_TEST(test_z80_inc_b_half_carry)
     ck_assert_int_eq(clocks.m, 1);
     ck_assert_int_eq(clocks.t, 4);
     ck_assert_int_eq(proc.registers.b, 0x10);
-    /* 0xFF + 1 does indeed half-carry */
     ck_assert_int_eq(proc.registers.f, Z80_HALF_CARRY);
 }
 END_TEST
