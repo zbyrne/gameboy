@@ -140,3 +140,33 @@ LD_B_imm(pZ80_t proc)
     Z80Clocks_t rtn = {2, 8};
     return rtn;
 }
+
+/*
+ * Rotate A left with carry.
+ */
+Z80Clocks_t
+RLC_A(pZ80_t proc)
+{
+    uint8_t carry = proc->registers.a & 0x80 ? 1 : 0;
+    uint8_t val = (proc->registers.a << 1) + carry;
+    proc->registers.f &= ~(Z80_SUB_OP | Z80_HALF_CARRY);
+    if (val == 0)
+    {
+        proc->registers.f |= Z80_ZERO;
+    }
+    else
+    {
+        proc->registers.f &= ~Z80_ZERO;
+    }
+    if (carry)
+    {
+        proc->registers.f |= Z80_CARRY;
+    }
+    else
+    {
+        proc->registers.f &= ~Z80_CARRY;
+    }
+    proc->registers.a = val;
+    Z80Clocks_t rtn = {1, 4};
+    return rtn;
+}

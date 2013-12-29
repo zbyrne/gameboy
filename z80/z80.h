@@ -47,6 +47,7 @@ Z80Clocks_t INC_BC(pZ80_t);
 Z80Clocks_t INC_B(pZ80_t);
 Z80Clocks_t DEC_B(pZ80_t);
 Z80Clocks_t LD_B_imm(pZ80_t);
+Z80Clocks_t RLC_A(pZ80_t);
 /* 0x1 */
 /* 0x2 */
 /* 0x3 */
