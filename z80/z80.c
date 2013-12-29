@@ -129,3 +129,14 @@ DEC_B(pZ80_t proc)
     Z80Clocks_t rtn = {1, 4};
     return rtn;
 }
+
+/*
+ * Load 8-bit immediate value into B
+ */
+Z80Clocks_t
+LD_B_imm(pZ80_t proc)
+{
+    proc->registers.b = mem_read(++proc->registers.pc);
+    Z80Clocks_t rtn = {2, 8};
+    return rtn;
+}
