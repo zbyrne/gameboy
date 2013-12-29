@@ -58,3 +58,16 @@ LD_BC_ind_A(pZ80_t proc)
     Z80Clocks_t rtn = {2, 8};
     return rtn;
 }
+
+/*
+ * Increment the value of BC
+ */
+Z80Clocks_t
+INC_BC(pZ80_t proc)
+{
+    uint16_t val = (proc->registers.b << 8) + proc->registers.c + 1;
+    proc->registers.b = (val >> 8) & 0xFF;
+    proc->registers.c = val & 0xFF;
+    Z80Clocks_t rtn = {2, 8};
+    return rtn;
+}
