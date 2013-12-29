@@ -26,6 +26,46 @@ z80_reset(pZ80_t proc)
 }
 
 /*
+ * Helper Functions for setting or clearing status flags.
+ */
+void
+z80_set_flag(pZ80_t proc, uint8_t condition, uint8_t flag)
+{
+    if (condition)
+    {
+        proc->registers.f |= flag;
+    }
+    else
+    {
+        proc->registers.f &= ~flag;
+    }
+}
+
+void
+z80_set_zero(pZ80_t proc, uint8_t condition)
+{
+    z80_set_flag(proc, condition, Z80_ZERO);
+}
+
+void
+z80_set_sub_op(pZ80_t proc, uint8_t condition)
+{
+    z80_set_flag(proc, condition, Z80_SUB_OP);
+}
+
+void
+z80_set_half_carry(pZ80_t proc, uint8_t condition)
+{
+    z80_set_flag(proc, condition, Z80_HALF_CARRY);
+}
+
+void
+z80_set_carry(pZ80_t proc, uint8_t condition)
+{
+    z80_set_flag(proc, condition, Z80_CARRY);
+}
+
+/*
  * Do nothing, and increment the clocks.
  */
 Z80Clocks_t

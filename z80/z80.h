@@ -37,6 +37,11 @@ typedef struct{
 /* Function Definitions */
 void z80_reset(pZ80_t);
 void z80_decode(pZ80_t);
+void z80_set_flag(pZ80_t, uint8_t, uint8_t);
+void z80_set_zero(pZ80_t, uint8_t);
+void z80_set_sub_op(pZ80_t, uint8_t);
+void z80_set_half_carry(pZ80_t, uint8_t);
+void z80_set_carry(pZ80_t, uint8_t);
 
 /* Opcode Function Definitions */
 /* 0x0 */
