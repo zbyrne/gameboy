@@ -15,12 +15,12 @@ START_TEST(dummy_test)
 END_TEST
 */
 
-START_TEST(test_z80_inc_bc)
+START_TEST(test_z80_inc_16bit)
 {
     Z80_t proc;
     proc.registers.b = 1;
     proc.registers.c = 0xFF;
-    Z80Clocks_t clocks = INC_BC(&proc);
+    Z80Clocks_t clocks = INC_16bit(&proc, &proc.registers.b, &proc.registers.c);
     ck_assert_int_eq(clocks.m, 2);
     ck_assert_int_eq(clocks.t, 8);
     uint16_t result = (proc.registers.b << 8) + proc.registers.c;
@@ -77,7 +77,7 @@ z80_inc_suite(void)
   And are added here, like this
     tcase_add_test(tc_core, test_z80_reset);
  */
-    tcase_add_test(tc_core, test_z80_inc_bc);
+    tcase_add_test(tc_core, test_z80_inc_16bit);
     tcase_add_test(tc_core, test_z80_inc_b_zero);
     tcase_add_test(tc_core, test_z80_inc_b_not_zero);
     tcase_add_test(tc_core, test_z80_inc_b_half_carry);

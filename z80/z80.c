@@ -114,12 +114,12 @@ LD_reg_imm(pZ80_t proc, uint8_t *data_reg)
 }
 
 /*
- * Increment the value of BC
+ * Increment the value of the 16 bit register
  */
 Z80Clocks_t
-INC_BC(pZ80_t proc)
+INC_16bit(pZ80_t proc, uint8_t *high, uint8_t *low)
 {
-    uint16_t val = (proc->registers.b << 8) + proc->registers.c + 1;
+    uint16_t val = ((*high) << 8) + (*low) + 1;
     proc->registers.b = (val >> 8) & 0xFF;
     proc->registers.c = val & 0xFF;
     Z80Clocks_t rtn = {2, 8};
