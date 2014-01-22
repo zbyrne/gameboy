@@ -28,12 +28,12 @@ START_TEST(test_z80_inc_16bit)
 }
 END_TEST
 
-START_TEST(test_z80_inc_b_zero)
+START_TEST(test_z80_inc_reg_zero)
 {
     Z80_t proc;
     proc.registers.b = 0xFF;
     proc.registers.f = 0;
-    Z80Clocks_t clocks = INC_B(&proc);
+    Z80Clocks_t clocks = INC_reg(&proc, &proc.registers.b);
     ck_assert_int_eq(clocks.m, 1);
     ck_assert_int_eq(clocks.t, 4);
     ck_assert_int_eq(proc.registers.b, 0);
@@ -42,12 +42,12 @@ START_TEST(test_z80_inc_b_zero)
 }
 END_TEST
 
-START_TEST(test_z80_inc_b_not_zero)
+START_TEST(test_z80_inc_reg_not_zero)
 {
     Z80_t proc;
     proc.registers.b = 5;
     proc.registers.f = 0;
-    Z80Clocks_t clocks = INC_B(&proc);
+    Z80Clocks_t clocks = INC_reg(&proc, &proc.registers.b);
     ck_assert_int_eq(clocks.m, 1);
     ck_assert_int_eq(clocks.t, 4);
     ck_assert_int_eq(proc.registers.b, 6);
@@ -55,12 +55,12 @@ START_TEST(test_z80_inc_b_not_zero)
 }
 END_TEST
 
-START_TEST(test_z80_inc_b_half_carry)
+START_TEST(test_z80_inc_reg_half_carry)
 {
     Z80_t proc;
     proc.registers.b = 0xF;
     proc.registers.f = 0;
-    Z80Clocks_t clocks = INC_B(&proc);
+    Z80Clocks_t clocks = INC_reg(&proc, &proc.registers.b);
     ck_assert_int_eq(clocks.m, 1);
     ck_assert_int_eq(clocks.t, 4);
     ck_assert_int_eq(proc.registers.b, 0x10);
@@ -78,9 +78,9 @@ z80_inc_suite(void)
     tcase_add_test(tc_core, test_z80_reset);
  */
     tcase_add_test(tc_core, test_z80_inc_16bit);
-    tcase_add_test(tc_core, test_z80_inc_b_zero);
-    tcase_add_test(tc_core, test_z80_inc_b_not_zero);
-    tcase_add_test(tc_core, test_z80_inc_b_half_carry);
+    tcase_add_test(tc_core, test_z80_inc_reg_zero);
+    tcase_add_test(tc_core, test_z80_inc_reg_not_zero);
+    tcase_add_test(tc_core, test_z80_inc_reg_half_carry);
     suite_add_tcase(s, tc_core);
     return s;
 }

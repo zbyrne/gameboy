@@ -127,16 +127,16 @@ INC_16bit(pZ80_t proc, uint8_t *high, uint8_t *low)
 }
 
 /*
- * Increment the value of B
+ * Increment the value of the register
  */
 Z80Clocks_t
-INC_B(pZ80_t proc)
+INC_reg(pZ80_t proc, uint8_t *data_reg)
 {
-    uint8_t val = proc->registers.b + 1;
+    uint8_t val = (*data_reg) + 1;
     z80_set_sub_op(proc, 0);
     z80_set_zero(proc, (val == 0 ? 1 : 0));
-    z80_set_half_carry(proc, ((proc->registers.b & 0xF) + 1 >= 0x10 ? 1 : 0));
-    proc->registers.b = val;
+    z80_set_half_carry(proc, ((*data_reg & 0xF) + 1 >= 0x10 ? 1 : 0));
+    *data_reg = val;
     Z80Clocks_t rtn = {1, 4};
     return rtn;
 }
