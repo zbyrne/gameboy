@@ -15,12 +15,12 @@ START_TEST(dummy_test)
 END_TEST
 */
 
-START_TEST(test_z80_rlc_a_zero)
+START_TEST(test_z80_rlc_reg_zero)
 {
     Z80_t proc;
     proc.registers.a = 0x0;
     proc.registers.f = 0;
-    Z80Clocks_t clocks = RLC_A(&proc);
+    Z80Clocks_t clocks = RLC_reg(&proc, &proc.registers.a);
     ck_assert_int_eq(clocks.m, 1);
     ck_assert_int_eq(clocks.t, 4);
     ck_assert_int_eq(proc.registers.a, 0);
@@ -28,12 +28,12 @@ START_TEST(test_z80_rlc_a_zero)
 }
 END_TEST
 
-START_TEST(test_z80_rlc_a_set_carry)
+START_TEST(test_z80_rlc_reg_set_carry)
 {
     Z80_t proc;
     proc.registers.a = 0xF0;
     proc.registers.f = 0;
-    Z80Clocks_t clocks = RLC_A(&proc);
+    Z80Clocks_t clocks = RLC_reg(&proc, &proc.registers.a);
     ck_assert_int_eq(clocks.m, 1);
     ck_assert_int_eq(clocks.t, 4);
     ck_assert_int_eq(proc.registers.a, 0xE1);
@@ -41,12 +41,12 @@ START_TEST(test_z80_rlc_a_set_carry)
 }
 END_TEST
 
-START_TEST(test_z80_rlc_a_clear_carry)
+START_TEST(test_z80_rlc_reg_clear_carry)
 {
     Z80_t proc;
     proc.registers.a = 0xF;
     proc.registers.f = Z80_CARRY;
-    Z80Clocks_t clocks = RLC_A(&proc);
+    Z80Clocks_t clocks = RLC_reg(&proc, &proc.registers.a);
     ck_assert_int_eq(clocks.m, 1);
     ck_assert_int_eq(clocks.t, 4);
     ck_assert_int_eq(proc.registers.a, 0x1E);
@@ -63,9 +63,9 @@ z80_rot_suite(void)
   And are added here, like this
     tcase_add_test(tc_core, test_z80_reset);
  */
-    tcase_add_test(tc_core, test_z80_rlc_a_zero);
-    tcase_add_test(tc_core, test_z80_rlc_a_set_carry);
-    tcase_add_test(tc_core, test_z80_rlc_a_clear_carry);
+    tcase_add_test(tc_core, test_z80_rlc_reg_zero);
+    tcase_add_test(tc_core, test_z80_rlc_reg_set_carry);
+    tcase_add_test(tc_core, test_z80_rlc_reg_clear_carry);
     suite_add_tcase(s, tc_core);
     return s;
 }

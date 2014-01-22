@@ -142,33 +142,33 @@ INC_reg(pZ80_t proc, uint8_t *data_reg)
 }
 
 /*
- * Decrement the value of B
+ * Decrement the value of the register
  */
 Z80Clocks_t
-DEC_B(pZ80_t proc)
+DEC_reg(pZ80_t proc, uint8_t *data_reg)
 {
-    uint8_t val = proc->registers.b - 1;
+    uint8_t val = (*data_reg) - 1;
     z80_set_sub_op(proc, 1);
     z80_set_zero(proc, (val == 0 ? 1 : 0));
-    z80_set_half_carry(proc, ((proc->registers.b & 0xF0) > (val & 0xF0) ? 1 : 0));
-    proc->registers.b = val;
+    z80_set_half_carry(proc, ((*data_reg & 0xF0) > (val & 0xF0) ? 1 : 0));
+    *data_reg = val;
     Z80Clocks_t rtn = {1, 4};
     return rtn;
 }
 
 /*
- * Rotate A left with carry.
+ * Rotate data_reg left with carry.
  */
 Z80Clocks_t
-RLC_A(pZ80_t proc)
+RLC_reg(pZ80_t proc, uint8_t *data_reg)
 {
-    uint8_t carry = proc->registers.a & 0x80 ? 1 : 0;
-    uint8_t val = (proc->registers.a << 1) + carry;
+    uint8_t carry = (*data_reg) & 0x80 ? 1 : 0;
+    uint8_t val = ((*data_reg) << 1) + carry;
     z80_set_sub_op(proc, 0);
     z80_set_zero(proc, (val == 0 ? 1 : 0));
     z80_set_half_carry(proc, 0);
     z80_set_carry(proc, carry);
-    proc->registers.a = val;
+    *data_reg = val;
     Z80Clocks_t rtn = {1, 4};
     return rtn;
 }
