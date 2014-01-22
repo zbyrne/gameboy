@@ -44,6 +44,8 @@ void z80_set_half_carry(pZ80_t, uint8_t);
 void z80_set_carry(pZ80_t, uint8_t);
 
 /* Opcode Function Definitions */
+Z80Clocks_t LD_16bit_imm(pZ80_t, uint8_t*, uint8_t*);
+Z80Clocks_t LD_16bit_ind_reg(pZ80_t, uint8_t*, uint8_t*, uint8_t*);
 /* 0x0 */
 Z80Clocks_t NOP(pZ80_t);
 Z80Clocks_t LD_BC_imm(pZ80_t);

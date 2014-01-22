@@ -45,13 +45,14 @@ mem_read(uint16_t addr)
     return 0xF0 + addr;
 }
 
-START_TEST(test_ld_bc_imm)
+START_TEST(test_ld_16bit_imm)
 {
     Z80_t proc;
     proc.registers.b = 0;
     proc.registers.c = 0;
     proc.registers.pc = 0;
-    Z80Clocks_t clocks = LD_BC_imm(&proc);
+    Z80Clocks_t clocks = LD_16bit_imm(&proc, &proc.registers.b,
+                                      &proc.registers.c);
     ck_assert_int_eq(clocks.m, 3);
     ck_assert_int_eq(clocks.t, 12);
     uint16_t result = (proc.registers.b << 8) + proc.registers.c;
@@ -68,14 +69,15 @@ mem_write(uint16_t addr, uint8_t val)
     ram[addr] = val;
 }
 
-START_TEST(test_ld_bc_ind_a)
+START_TEST(test_ld_16bit_ind_reg)
 {
     Z80_t proc;
     proc.registers.a = 0xAA;
     proc.registers.b = 0x1;
     proc.registers.c = 0xC;
     proc.registers.pc = 0;
-    Z80Clocks_t clocks = LD_BC_ind_A(&proc);
+    Z80Clocks_t clocks = LD_16bit_ind_reg(&proc, &proc.registers.b,
+                                          &proc.registers.c, &proc.registers.a);
     ck_assert_int_eq(clocks.m, 2);
     ck_assert_int_eq(clocks.t, 8);
     ck_assert_int_eq(ram[0x10C], 0xAA);
@@ -107,8 +109,8 @@ z80_ld_suite(void)
  */
     tcase_add_test(tc_core, test_z80_reset);
     tcase_add_test(tc_core, test_nop);
-    tcase_add_test(tc_core, test_ld_bc_imm);
-    tcase_add_test(tc_core, test_ld_bc_ind_a);
+    tcase_add_test(tc_core, test_ld_16bit_imm);
+    tcase_add_test(tc_core, test_ld_16bit_ind_reg);
     tcase_add_test(tc_core, test_ld_b_imm);
     suite_add_tcase(s, tc_core);
     return s;

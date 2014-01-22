@@ -76,25 +76,28 @@ NOP(pZ80_t proc)
 }
 
 /*
- * Load 16-bit immediate value into BC
+ * Load 16-bit immediate value into a 16 bit register
  */
 Z80Clocks_t
-LD_BC_imm(pZ80_t proc)
+LD_16bit_imm(pZ80_t proc, uint8_t *high, uint8_t *low)
 {
-    proc->registers.b = mem_read(++proc->registers.pc);
-    proc->registers.c = mem_read(++proc->registers.pc);
+    *high = mem_read(++proc->registers.pc);
+    *low = mem_read(++proc->registers.pc);
     Z80Clocks_t rtn = {3, 12};
     return rtn;
 }
 
 /*
- * Load value in A into address in BC
+ * Load value in data_reg into address in addr_high and addr_low
  */
 Z80Clocks_t
-LD_BC_ind_A(pZ80_t proc)
+LD_16bit_ind_reg(pZ80_t proc,
+                 uint8_t *addr_high,
+                 uint8_t *addr_low,
+                 uint8_t *data_reg)
 {
-    uint16_t addr = (proc->registers.b << 8) + proc->registers.c;
-    mem_write(addr, proc->registers.a);
+    uint16_t addr = ((*addr_high) << 8) + (*addr_low);
+    mem_write(addr, *data_reg);
     Z80Clocks_t rtn = {2, 8};
     return rtn;
 }
