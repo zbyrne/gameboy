@@ -85,12 +85,12 @@ START_TEST(test_ld_16bit_ind_reg)
 }
 END_TEST
 
-START_TEST(test_ld_b_imm)
+START_TEST(test_ld_reg_imm)
 {
     Z80_t proc;
     proc.registers.b = 0;
     proc.registers.pc = 0;
-    Z80Clocks_t clocks = LD_B_imm(&proc);
+    Z80Clocks_t clocks = LD_reg_imm(&proc, &proc.registers.b);
     ck_assert_int_eq(clocks.m, 2);
     ck_assert_int_eq(clocks.t, 8);
     ck_assert_int_eq(proc.registers.b, 0xF1);
@@ -111,7 +111,7 @@ z80_ld_suite(void)
     tcase_add_test(tc_core, test_nop);
     tcase_add_test(tc_core, test_ld_16bit_imm);
     tcase_add_test(tc_core, test_ld_16bit_ind_reg);
-    tcase_add_test(tc_core, test_ld_b_imm);
+    tcase_add_test(tc_core, test_ld_reg_imm);
     suite_add_tcase(s, tc_core);
     return s;
 }

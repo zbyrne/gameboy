@@ -103,6 +103,17 @@ LD_16bit_ind_reg(pZ80_t proc,
 }
 
 /*
+ * Load 8-bit immediate value into data_reg
+ */
+Z80Clocks_t
+LD_reg_imm(pZ80_t proc, uint8_t *data_reg)
+{
+    *data_reg = mem_read(++proc->registers.pc);
+    Z80Clocks_t rtn = {2, 8};
+    return rtn;
+}
+
+/*
  * Increment the value of BC
  */
 Z80Clocks_t
@@ -142,17 +153,6 @@ DEC_B(pZ80_t proc)
     z80_set_half_carry(proc, ((proc->registers.b & 0xF0) > (val & 0xF0) ? 1 : 0));
     proc->registers.b = val;
     Z80Clocks_t rtn = {1, 4};
-    return rtn;
-}
-
-/*
- * Load 8-bit immediate value into B
- */
-Z80Clocks_t
-LD_B_imm(pZ80_t proc)
-{
-    proc->registers.b = mem_read(++proc->registers.pc);
-    Z80Clocks_t rtn = {2, 8};
     return rtn;
 }
 
