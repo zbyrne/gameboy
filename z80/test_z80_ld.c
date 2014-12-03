@@ -56,7 +56,7 @@ START_TEST(test_ld_16bit_imm)
     ck_assert_int_eq(clocks.m, 3);
     ck_assert_int_eq(clocks.t, 12);
     uint16_t result = (proc.registers.b << 8) + proc.registers.c;
-    ck_assert_int_eq(result, 0xF1F2);
+    ck_assert_int_eq(result, 0xF2F1);
     ck_assert_int_eq(proc.registers.pc, 2);
 }
 END_TEST

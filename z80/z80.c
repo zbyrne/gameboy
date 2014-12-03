@@ -81,8 +81,8 @@ NOP(pZ80_t proc)
 Z80Clocks_t
 LD_16bit_imm(pZ80_t proc, uint8_t *high, uint8_t *low)
 {
-    *high = mem_read(++proc->registers.pc);
     *low = mem_read(++proc->registers.pc);
+    *high = mem_read(++proc->registers.pc);
     Z80Clocks_t rtn = {3, 12};
     return rtn;
 }
