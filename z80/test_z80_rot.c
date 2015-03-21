@@ -1,83 +1,54 @@
 #include <stdint.h>
-#include <check.h>
 #include <string.h>
 #include "z80.h"
+#include "testme.h"
 
 uint8_t mem_read(uint16_t addr){return 0;}
 void mem_write(uint16_t addr, uint8_t val){}
 
-
-/*Tests look like this
-START_TEST(dummy_test)
-{
-    ck_assert_int_eq(5, 5);
-}
-END_TEST
-*/
-
-START_TEST(test_z80_rlc_reg_zero)
+TESTME_START(test_z80_rlc_reg_zero)
 {
     Z80_t proc;
     proc.registers.a = 0x0;
     proc.registers.f = 0;
     Z80Clocks_t clocks = RLC_reg(&proc, &proc.registers.a);
-    ck_assert_int_eq(clocks.m, 1);
-    ck_assert_int_eq(clocks.t, 4);
-    ck_assert_int_eq(proc.registers.a, 0);
-    ck_assert_int_eq(proc.registers.f, Z80_ZERO);
+    TESTME_ASSERT_INT_EQ(clocks.m, 1);
+    TESTME_ASSERT_INT_EQ(clocks.t, 4);
+    TESTME_ASSERT_INT_EQ(proc.registers.a, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.f, Z80_ZERO);
 }
-END_TEST
+TESTME_END
 
-START_TEST(test_z80_rlc_reg_set_carry)
+TESTME_START(test_z80_rlc_reg_set_carry)
 {
     Z80_t proc;
     proc.registers.a = 0xF0;
     proc.registers.f = 0;
     Z80Clocks_t clocks = RLC_reg(&proc, &proc.registers.a);
-    ck_assert_int_eq(clocks.m, 1);
-    ck_assert_int_eq(clocks.t, 4);
-    ck_assert_int_eq(proc.registers.a, 0xE1);
-    ck_assert_int_eq(proc.registers.f, Z80_CARRY);
+    TESTME_ASSERT_INT_EQ(clocks.m, 1);
+    TESTME_ASSERT_INT_EQ(clocks.t, 4);
+    TESTME_ASSERT_INT_EQ(proc.registers.a, 0xE1);
+    TESTME_ASSERT_INT_EQ(proc.registers.f, Z80_CARRY);
 }
-END_TEST
+TESTME_END
 
-START_TEST(test_z80_rlc_reg_clear_carry)
+TESTME_START(test_z80_rlc_reg_clear_carry)
 {
     Z80_t proc;
     proc.registers.a = 0xF;
     proc.registers.f = Z80_CARRY;
     Z80Clocks_t clocks = RLC_reg(&proc, &proc.registers.a);
-    ck_assert_int_eq(clocks.m, 1);
-    ck_assert_int_eq(clocks.t, 4);
-    ck_assert_int_eq(proc.registers.a, 0x1E);
-    ck_assert_int_eq(proc.registers.f, 0);
+    TESTME_ASSERT_INT_EQ(clocks.m, 1);
+    TESTME_ASSERT_INT_EQ(clocks.t, 4);
+    TESTME_ASSERT_INT_EQ(proc.registers.a, 0x1E);
+    TESTME_ASSERT_INT_EQ(proc.registers.f, 0);
 }
-END_TEST
+TESTME_END
 
-Suite *
-z80_rot_suite(void)
+TESTME_SUITE(test_z80_rotate)
 {
-    Suite *s = suite_create("z80_Rotate");
-    TCase *tc_core = tcase_create("Core");
-/*
-  And are added here, like this
-    tcase_add_test(tc_core, test_z80_reset);
- */
-    tcase_add_test(tc_core, test_z80_rlc_reg_zero);
-    tcase_add_test(tc_core, test_z80_rlc_reg_set_carry);
-    tcase_add_test(tc_core, test_z80_rlc_reg_clear_carry);
-    suite_add_tcase(s, tc_core);
-    return s;
+    TESTME_SUITE_RUN_TEST(test_z80_rlc_reg_zero);
+    TESTME_SUITE_RUN_TEST(test_z80_rlc_reg_set_carry);
+    TESTME_SUITE_RUN_TEST(test_z80_rlc_reg_clear_carry);
 }
-
-int
-main(void)
-{
-    int number_failed;
-    Suite *s = z80_rot_suite();
-    SRunner *sr = srunner_create(s);
-    srunner_run_all(sr, CK_NORMAL);
-    number_failed = srunner_ntests_failed(sr);
-    srunner_free(sr);
-    return number_failed;
-}
+TESTME_SUITE_END

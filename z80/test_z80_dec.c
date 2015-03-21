@@ -1,83 +1,56 @@
 #include <stdint.h>
-#include <check.h>
 #include <string.h>
 #include "z80.h"
+#include "testme.h"
 
 uint8_t mem_read(uint16_t addr){return 0;}
 void mem_write(uint16_t addr, uint8_t val){}
 
-
-/*Tests look like this
-START_TEST(dummy_test)
-{
-    ck_assert_int_eq(5, 5);
-}
-END_TEST
-*/
-
-START_TEST(test_z80_dec_reg_zero)
+TESTME_START(test_z80_dec_reg_zero)
 {
     Z80_t proc;
     proc.registers.b = 0x01;
     proc.registers.f = 0;
     Z80Clocks_t clocks = DEC_reg(&proc, &proc.registers.b);
-    ck_assert_int_eq(clocks.m, 1);
-    ck_assert_int_eq(clocks.t, 4);
-    ck_assert_int_eq(proc.registers.b, 0);
-    ck_assert_int_eq(proc.registers.f, Z80_ZERO | Z80_SUB_OP);
+    TESTME_ASSERT_INT_EQ(clocks.m, 1);
+    TESTME_ASSERT_INT_EQ(clocks.t, 4);
+    TESTME_ASSERT_INT_EQ(proc.registers.b, 0);
+    uint8_t flags = Z80_ZERO | Z80_SUB_OP;
+    TESTME_ASSERT_INT_EQ(proc.registers.f, flags);
 }
-END_TEST
+TESTME_END
 
-START_TEST(test_z80_dec_reg_not_zero)
+TESTME_START(test_z80_dec_reg_not_zero)
 {
     Z80_t proc;
     proc.registers.b = 5;
     proc.registers.f = 0;
     Z80Clocks_t clocks = DEC_reg(&proc, &proc.registers.b);
-    ck_assert_int_eq(clocks.m, 1);
-    ck_assert_int_eq(clocks.t, 4);
-    ck_assert_int_eq(proc.registers.b, 4);
-    ck_assert_int_eq(proc.registers.f, Z80_SUB_OP);
+    TESTME_ASSERT_INT_EQ(clocks.m, 1);
+    TESTME_ASSERT_INT_EQ(clocks.t, 4);
+    TESTME_ASSERT_INT_EQ(proc.registers.b, 4);
+    TESTME_ASSERT_INT_EQ(proc.registers.f, Z80_SUB_OP);
 }
-END_TEST
+TESTME_END
 
-START_TEST(test_z80_dec_reg_half_carry)
+TESTME_START(test_z80_dec_reg_half_carry)
 {
     Z80_t proc;
     proc.registers.b = 0xF0;
     proc.registers.f = 0;
     Z80Clocks_t clocks = DEC_reg(&proc, &proc.registers.b);
-    ck_assert_int_eq(clocks.m, 1);
-    ck_assert_int_eq(clocks.t, 4);
-    ck_assert_int_eq(proc.registers.b, 0xEF);
-    ck_assert_int_eq(proc.registers.f, Z80_HALF_CARRY | Z80_SUB_OP);
+    TESTME_ASSERT_INT_EQ(clocks.m, 1);
+    TESTME_ASSERT_INT_EQ(clocks.t, 4);
+    TESTME_ASSERT_INT_EQ(proc.registers.b, 0xEF);
+    uint8_t flags = Z80_HALF_CARRY | Z80_SUB_OP;
+    TESTME_ASSERT_INT_EQ(proc.registers.f, flags);
 }
-END_TEST
+TESTME_END
 
-Suite *
-z80_dec_suite(void)
+TESTME_SUITE(test_z80_decrement)
 {
-    Suite *s = suite_create("z80_Decrement");
-    TCase *tc_core = tcase_create("Core");
-/*
-  And are added here, like this
-    tcase_add_test(tc_core, test_z80_reset);
- */
-    tcase_add_test(tc_core, test_z80_dec_reg_zero);
-    tcase_add_test(tc_core, test_z80_dec_reg_not_zero);
-    tcase_add_test(tc_core, test_z80_dec_reg_half_carry);
-    suite_add_tcase(s, tc_core);
-    return s;
+    TESTME_SUITE_RUN_TEST(test_z80_dec_reg_zero);
+    TESTME_SUITE_RUN_TEST(test_z80_dec_reg_not_zero);
+    TESTME_SUITE_RUN_TEST(test_z80_dec_reg_half_carry);
 }
-
-int
-main(void)
-{
-    int number_failed;
-    Suite *s = z80_dec_suite();
-    SRunner *sr = srunner_create(s);
-    srunner_run_all(sr, CK_NORMAL);
-    number_failed = srunner_ntests_failed(sr);
-    srunner_free(sr);
-    return number_failed;
-}
+TESTME_SUITE_END

@@ -1,43 +1,35 @@
 #include <stdint.h>
-#include <check.h>
 #include <string.h>
 #include "z80.h"
+#include "testme.h"
 
-/*Tests look like this
-START_TEST(dummy_test)
-{
-    ck_assert_int_eq(5, 5);
-}
-END_TEST
-*/
-
-START_TEST(test_z80_reset)
+TESTME_START(test_z80_reset)
 {
     Z80_t proc;
     memset(&proc, 0xFF, sizeof(proc));
     z80_reset(&proc);
-    ck_assert_int_eq(proc.registers.a, 0);
-    ck_assert_int_eq(proc.registers.b, 0);
-    ck_assert_int_eq(proc.registers.c, 0);
-    ck_assert_int_eq(proc.registers.d, 0);
-    ck_assert_int_eq(proc.registers.e, 0);
-    ck_assert_int_eq(proc.registers.f, 0);
-    ck_assert_int_eq(proc.registers.pc, 0);
-    ck_assert_int_eq(proc.registers.sp, 0);
-    ck_assert_int_eq(proc.registers.ime, 1);
-    ck_assert_int_eq(proc.clocks.m, 0);
-    ck_assert_int_eq(proc.clocks.t, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.a, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.b, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.c, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.d, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.e, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.f, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.pc, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.sp, 0);
+    TESTME_ASSERT_INT_EQ(proc.registers.ime, 1);
+    TESTME_ASSERT_INT_EQ(proc.clocks.m, 0);
+    TESTME_ASSERT_INT_EQ(proc.clocks.t, 0);
 }
-END_TEST
+TESTME_END
 
-START_TEST(test_nop)
+TESTME_START(test_nop)
 {
     Z80_t proc;
     Z80Clocks_t clocks = NOP(&proc);
-    ck_assert_int_eq(clocks.m, 1);
-    ck_assert_int_eq(clocks.t, 4);
+    TESTME_ASSERT_INT_EQ(clocks.m, 1);
+    TESTME_ASSERT_INT_EQ(clocks.t, 4);
 }
-END_TEST
+TESTME_END
 
 uint8_t
 mem_read(uint16_t addr)
@@ -45,7 +37,7 @@ mem_read(uint16_t addr)
     return 0xF0 + addr;
 }
 
-START_TEST(test_ld_16bit_imm)
+TESTME_START(test_ld_16bit_imm)
 {
     Z80_t proc;
     proc.registers.b = 0;
@@ -53,13 +45,13 @@ START_TEST(test_ld_16bit_imm)
     proc.registers.pc = 0;
     Z80Clocks_t clocks = LD_16bit_imm(&proc, &proc.registers.b,
                                       &proc.registers.c);
-    ck_assert_int_eq(clocks.m, 3);
-    ck_assert_int_eq(clocks.t, 12);
+    TESTME_ASSERT_INT_EQ(clocks.m, 3);
+    TESTME_ASSERT_INT_EQ(clocks.t, 12);
     uint16_t result = (proc.registers.b << 8) + proc.registers.c;
-    ck_assert_int_eq(result, 0xF2F1);
-    ck_assert_int_eq(proc.registers.pc, 2);
+    TESTME_ASSERT_INT_EQ(result, 0xF2F1);
+    TESTME_ASSERT_INT_EQ(proc.registers.pc, 2);
 }
-END_TEST
+TESTME_END
 
 uint8_t ram[1024] = {0};
 
@@ -69,7 +61,7 @@ mem_write(uint16_t addr, uint8_t val)
     ram[addr] = val;
 }
 
-START_TEST(test_ld_16bit_ind_reg)
+TESTME_START(test_ld_16bit_ind_reg)
 {
     Z80_t proc;
     proc.registers.a = 0xAA;
@@ -78,52 +70,32 @@ START_TEST(test_ld_16bit_ind_reg)
     proc.registers.pc = 0;
     Z80Clocks_t clocks = LD_16bit_ind_reg(&proc, &proc.registers.b,
                                           &proc.registers.c, &proc.registers.a);
-    ck_assert_int_eq(clocks.m, 2);
-    ck_assert_int_eq(clocks.t, 8);
-    ck_assert_int_eq(ram[0x10C], 0xAA);
-    ck_assert_int_eq(proc.registers.pc, 0);
+    TESTME_ASSERT_INT_EQ(clocks.m, 2);
+    TESTME_ASSERT_INT_EQ(clocks.t, 8);
+    TESTME_ASSERT_INT_EQ(ram[0x10C], 0xAA);
+    TESTME_ASSERT_INT_EQ(proc.registers.pc, 0);
 }
-END_TEST
+TESTME_END
 
-START_TEST(test_ld_reg_imm)
+TESTME_START(test_ld_reg_imm)
 {
     Z80_t proc;
     proc.registers.b = 0;
     proc.registers.pc = 0;
     Z80Clocks_t clocks = LD_reg_imm(&proc, &proc.registers.b);
-    ck_assert_int_eq(clocks.m, 2);
-    ck_assert_int_eq(clocks.t, 8);
-    ck_assert_int_eq(proc.registers.b, 0xF1);
-    ck_assert_int_eq(proc.registers.pc, 1);
+    TESTME_ASSERT_INT_EQ(clocks.m, 2);
+    TESTME_ASSERT_INT_EQ(clocks.t, 8);
+    TESTME_ASSERT_INT_EQ(proc.registers.b, 0xF1);
+    TESTME_ASSERT_INT_EQ(proc.registers.pc, 1);
 }
-END_TEST
+TESTME_END
 
-Suite *
-z80_ld_suite(void)
+TESTME_SUITE(z80_load)
 {
-    Suite *s = suite_create("z80_Load");
-    TCase *tc_core = tcase_create("Core");
-/*
-  And are added here, like this
-    tcase_add_test(tc_core, test_z80_reset);
- */
-    tcase_add_test(tc_core, test_z80_reset);
-    tcase_add_test(tc_core, test_nop);
-    tcase_add_test(tc_core, test_ld_16bit_imm);
-    tcase_add_test(tc_core, test_ld_16bit_ind_reg);
-    tcase_add_test(tc_core, test_ld_reg_imm);
-    suite_add_tcase(s, tc_core);
-    return s;
+    TESTME_SUITE_RUN_TEST(test_z80_reset);
+    TESTME_SUITE_RUN_TEST(test_nop);
+    TESTME_SUITE_RUN_TEST(test_ld_16bit_imm);
+    TESTME_SUITE_RUN_TEST(test_ld_16bit_ind_reg);
+    TESTME_SUITE_RUN_TEST(test_ld_reg_imm);
 }
-
-int
-main(void)
-{
-    int number_failed;
-    Suite *s = z80_ld_suite();
-    SRunner *sr = srunner_create(s);
-    srunner_run_all(sr, CK_NORMAL);
-    number_failed = srunner_ntests_failed(sr);
-    srunner_free(sr);
-    return number_failed;
-}
+TESTME_SUITE_END
