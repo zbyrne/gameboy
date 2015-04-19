@@ -96,6 +96,23 @@ TESTME_START(test_ld_reg_imm)
 }
 TESTME_END
 
+TESTME_START(test_ld_imm_sp)
+{
+    Z80_t proc;
+    memset(ram, 0, sizeof(ram));
+    proc.registers.sp = 0x55AA;
+    proc.registers.pc = 0;
+    ram[1] = 1;
+    ram[2] = 2;
+    Z80Clocks_t clocks = LD_imm_SP(&proc);
+    TESTME_ASSERT_INT_EQ(clocks.m, 5);
+    TESTME_ASSERT_INT_EQ(clocks.t, 20);
+    TESTME_ASSERT_INT_EQ(ram[0x201], 0xAA);
+    TESTME_ASSERT_INT_EQ(ram[0x202], 0x55);
+    TESTME_ASSERT_INT_EQ(proc.registers.pc, 2);
+}
+TESTME_END
+
 TESTME_SUITE(z80_load)
 {
     TESTME_SUITE_RUN_TEST(test_z80_reset);
@@ -103,5 +120,6 @@ TESTME_SUITE(z80_load)
     TESTME_SUITE_RUN_TEST(test_ld_16bit_imm);
     TESTME_SUITE_RUN_TEST(test_ld_16bit_ind_reg);
     TESTME_SUITE_RUN_TEST(test_ld_reg_imm);
+    TESTME_SUITE_RUN_TEST(test_ld_imm_sp);
 }
 TESTME_SUITE_END

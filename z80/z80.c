@@ -172,3 +172,19 @@ RLC_reg(pZ80_t proc, uint8_t *data_reg)
     Z80Clocks_t rtn = {1, 4};
     return rtn;
 }
+
+/*
+ * Write SP to 16 bit immediate address.
+ */
+Z80Clocks_t
+LD_imm_SP(pZ80_t proc)
+{
+    uint8_t low = mem_read(++proc->registers.pc);
+    uint8_t high = mem_read(++proc->registers.pc);
+    uint16_t addr = (high << 8) + low;
+    mem_write(addr, proc->registers.sp & 0xFF);
+    mem_write(++addr, proc->registers.sp >> 8);
+    Z80Clocks_t rtn = {5, 20};
+    return rtn;
+
+}
