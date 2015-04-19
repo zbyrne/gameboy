@@ -188,3 +188,21 @@ LD_imm_SP(pZ80_t proc)
     return rtn;
 
 }
+
+/*
+ * Add 16 bit register to HL.
+ */
+Z80Clocks_t
+ADD_HL_16bit(pZ80_t proc, uint8_t *high, uint8_t *low)
+{
+    uint16_t hl = (proc->registers.h << 8) + proc->registers.l;
+    uint16_t value = (*high << 8) + *low;
+    uint16_t result = hl + value;
+    z80_set_sub_op(proc, 0);
+    z80_set_half_carry(proc, ((value & 0xFFF)+(hl & 0xFFF)) >= 0x1000 ? 1 : 0);
+    z80_set_carry(proc, ((uint32_t)hl + (uint32_t)value) > result ? 1 : 0);
+    proc->registers.h = result >> 8;
+    proc->registers.l = result & 0xFF;
+    Z80Clocks_t rtn = {2, 8};
+    return rtn;
+}

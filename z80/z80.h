@@ -51,6 +51,7 @@ Z80Clocks_t INC_16bit(pZ80_t, uint8_t*, uint8_t*);
 Z80Clocks_t INC_reg(pZ80_t, uint8_t*);
 Z80Clocks_t DEC_reg(pZ80_t, uint8_t*);
 Z80Clocks_t RLC_reg(pZ80_t, uint8_t*);
+Z80Clocks_t ADD_HL_16bit(pZ80_t, uint8_t*, uint8_t*);
 
 /* 0x0 */
 Z80Clocks_t NOP(pZ80_t);
