@@ -186,7 +186,6 @@ LD_imm_SP(pZ80_t proc)
     mem_write(++addr, proc->registers.sp >> 8);
     Z80Clocks_t rtn = {5, 20};
     return rtn;
-
 }
 
 /*
