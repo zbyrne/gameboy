@@ -61,7 +61,7 @@ struct ErrMsgList{
     printf("\nPassed: %d Total: %d\n", tests_passed, total_tests); \
     for(i=head.next; i; i=i->next) \
     { \
-    printf(i->msg); \
+    printf("%s", i->msg);                    \
     } \
     return (tests_passed == total_tests) ? 0 : 1; \
     }
