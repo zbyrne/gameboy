@@ -108,8 +108,9 @@ class Z80(object):
         return 8
 
     def inc_bc(self):
-        self.bc += 1
         self.pc += 1
+        self.bc += 1
+        self.bc &= 0xFFFF
         return 8
 
     def inc_b(self):
@@ -156,4 +157,95 @@ class Z80(object):
         self.c_flag = (self.hl + self.bc) > 0xFFFF
         self.h_flag = ((self.hl & 0xFFF) + (self.bc & 0xFFF)) > 0xFFF
         self.hl = (self.hl + self.pc) & 0xFFFF
+        return 8
+
+    def ld_a_addr_bc(Self):
+        self.pc += 1
+        self.a = self._mem.read_byte(self.bc)
+        return 8
+
+    def dec_bc(self):
+        self.pc += 1
+        if self.bc == 0:
+            self.bc = 0xFFFF
+        else:
+            self.bc -= 1
+        return 8
+
+    def inc_c(self):
+        self.h_flag = ((self.c & 0xF) + 1) > 0xF
+        self.c = (self.c + 1) & 0xFF
+        self.z_flag = self.c == 0
+        self.n_flag = False
+        self.pc += 1
+        return 4
+
+    def dec_c(self):
+        self.h_flag = (self.c & 0xF0) > ((self.c - 1) & 0xF0)
+        self.c = 0xFF if self.c == 0 else (self.c - 1) & 0xFF
+        self.z_flag = self.c == 0
+        self.n_flag = True
+        self.pc += 1
+        return 4
+
+    def ld_c_d8(self):
+        self.pc += 1
+        self.c = self._mem.read_byte(self.pc)
+        self.pc += 1
+        return 8
+
+    def rrca(self):
+        self.pc +=1
+        self.f = 0
+        self.c_flag = bool(self.a & 1)
+        self.a >>= 1
+        self.a &= 0xFF
+        self.a |= int(self.c_flag) << 7
+        self.z_flag = self.a == 0
+        return 4
+
+    def stop(self):
+        """
+        Going to have to do something silly here to stop the cpu.
+        """
+        self.pc += 2
+        return 4
+
+    def ld_de_d16(self):
+        self.pc += 1
+        self.de = self._mem.read_word(self.pc)
+        self.pc += 2
+        return 12
+
+    def ld_addr_de_a(self):
+        self._mem.write_byte(self.a, self.de)
+        self.pc +=1
+        return 8
+
+    def inc_de(self):
+        self.pc += 1
+        self.de += 1
+        self.de &= 0xFFFF
+        return 8
+
+    def inc_c(self):
+        self.h_flag = ((self.c & 0xF) + 1) > 0xF
+        self.c = (self.c + 1) & 0xFF
+        self.z_flag = self.c == 0
+        self.n_flag = False
+        self.pc += 1
+        return 4
+
+    def dec_c(self):
+        self.h_flag = (self.c & 0xF0) > ((self.c - 1) & 0xF0)
+        self.c = 0xFF if self.c == 0 else (self.c - 1) & 0xFF
+        self.z_flag = self.c == 0
+        self.n_flag = True
+        self.pc += 1
+        return 4
+
+    def ld_c_d8(self):
+        self.pc += 1
+        self.c = self._mem.read_byte(self.pc)
+        self.pc += 1
         return 8
