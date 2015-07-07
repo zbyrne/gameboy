@@ -21,7 +21,7 @@ class Z80(object):
         return (self.b << 8) + self.c
 
     @bc.setter
-    def set(self, val):
+    def bc(self, val):
         self.b = (val >> 8) & 0xFF
         self.c = val & 0xFF
 
@@ -30,7 +30,7 @@ class Z80(object):
         return (self.d << 8) + self.e
 
     @de.setter
-    def set(self, val):
+    def de(self, val):
         self.d = (val >> 8) & 0xFF
         self.e = val & 0xFF
 
@@ -39,7 +39,7 @@ class Z80(object):
         return (self.h << 8) + self.l
 
     @hl.setter
-    def set(self, val):
+    def hl(self, val):
         self.h = (val >> 8) & 0xFF
         self.l = val & 0xFF
 
@@ -48,7 +48,7 @@ class Z80(object):
         return bool(self.f & Z_FLAG)
 
     @z_flag.setter
-    def set(self, val):
+    def z_flag(self, val):
         if val:
             self.f |= Z_FLAG
         else:
@@ -59,7 +59,7 @@ class Z80(object):
         return bool(self.f & N_FLAG)
 
     @n_flag.setter
-    def set(self, val):
+    def n_flag(self, val):
         if val:
             self.f |= N_FLAG
         else:
@@ -70,7 +70,7 @@ class Z80(object):
         return bool(self.f & H_FLAG)
 
     @h_flag.setter
-    def set(self, val):
+    def h_flag(self, val):
         if val:
             self.f |= H_FLAG
         else:
@@ -81,7 +81,7 @@ class Z80(object):
         return bool(self.f & C_FLAG)
 
     @c_flag.setter
-    def set(self, val):
+    def c_flag(self, val):
         if val:
             self.f |= C_FLAG
         else:
