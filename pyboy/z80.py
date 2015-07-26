@@ -21,6 +21,15 @@ class Z80(object):
         self.pc = 0
 
     @property
+    def af(self):
+        return (self.a << 8) + self.f
+
+    @af.setter
+    def af(self, val):
+        self.a = (val >> 8) & 0xFF
+        self.f = val & 0xFF
+
+    @property
     def bc(self):
         return (self.b << 8) + self.c
 
