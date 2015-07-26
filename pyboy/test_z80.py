@@ -181,6 +181,7 @@ class RotateRightTests(TestCase):
     def test_rotate_right_through_carry_with_carry(self):
         res = rotate_right_through_carry(0x10, c=1)
         self.assertEqual(res.result, 0x88)
+        self.assertFalse(res.c_flag)
 
     def test_rotate_right_through_carry_set_carry(self):
         res = rotate_right_through_carry(1)
