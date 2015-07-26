@@ -1,5 +1,6 @@
 from unittest import TestCase
-from z80 import add_8bit, add_16bit, sub_8bit, sub_16bit
+from z80 import (add_8bit, add_16bit, sub_8bit, sub_16bit, rotate_right,
+                 rotate_right_through_carry)
 
 class Add8BitTests(TestCase):
     def test_8bit_add(self):
@@ -150,4 +151,38 @@ class Sub16BitTests(TestCase):
     def test_16bit_sub_zero(self):
         res = sub_16bit(0xF00, 0xF00)
         self.assertEqual(res.result, 0)
+        self.assertTrue(res.z_flag)
+
+
+class RotateRightTests(TestCase):
+    def test_rotate_right(self):
+        res = rotate_right(0x10)
+        self.assertEqual(res.result, 0x8)
+        self.assertFalse(res.n_flag)
+        self.assertFalse(res.h_flag)
+
+    def test_rotate_right_wrap(self):
+        res = rotate_right(1)
+        self.assertEqual(res.result, 0x80)
+        self.assertTrue(res.c_flag)
+
+    def test_rotate_right_zero(self):
+        res = rotate_right(0)
+        self.assertEqual(res.result, 0)
+        self.assertTrue(res.z_flag)
+
+    def test_rotate_right_through_carry(self):
+        res = rotate_right_through_carry(0x10)
+        self.assertEqual(res.result, 0x8)
+        self.assertFalse(res.n_flag)
+        self.assertFalse(res.h_flag)
+
+    def test_rotate_right_through_carry_with_carry(self):
+        res = rotate_right_through_carry(0x10, c=1)
+        self.assertEqual(res.result, 0x88)
+
+    def test_rotate_right_through_carry_set_carry(self):
+        res = rotate_right_through_carry(1)
+        self.assertEqual(res.result, 0)
+        self.assertTrue(res.c_flag)
         self.assertTrue(res.z_flag)

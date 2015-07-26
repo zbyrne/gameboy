@@ -289,3 +289,23 @@ def sub_16bit(a, b):
     n_flag = True
     res = add_16bit(a, -b)
     return ALUResult(res.result, res.z_flag, n_flag, res.h_flag, not res.c_flag)
+
+
+def rotate_right(a):
+    val = a >> 1
+    val |= (a & 1) << 7
+    c_flag = bool(a & 1)
+    n_flag = False
+    h_flag = False
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def rotate_right_through_carry(a, c=0):
+    val = a >> 1
+    val |= c << 7
+    c_flag = bool(a & 1)
+    n_flag = False
+    h_flag = False
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
