@@ -1,7 +1,11 @@
+from collections import namedtuple
+
+
 Z_FLAG = 1 << 7
 N_FLAG = 1 << 6
 H_FLAG = 1 << 5
 C_FLAG = 1 << 4
+
 
 class Z80(object):
 
@@ -249,3 +253,37 @@ class Z80(object):
         self.d = self._mem.read_byte(self.pc)
         self.pc += 1
         return 8
+
+
+ALUResult = namedtuple("ALUResult",
+                       ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
+
+
+def add_8bit(a, b, c=0):
+    n_flag = False
+    c_flag = (a + b + c) & 0x1FF > 0xFF
+    h_flag = ((a & 0xF) + (b & 0xF)) + c > 0xF
+    val = (a + b + c) & 0xFF
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def sub_8bit(a, b, c=0):
+    n_flag = True
+    res = add_8bit(a, -(b + c))
+    return ALUResult(res.result, res.z_flag, n_flag, res.h_flag, not res.c_flag)
+
+
+def add_16bit(a, b):
+    n_flag = False
+    c_flag = (a + b) & 0x1FFFF > 0xFFFF
+    h_flag = ((a & 0xFFF) + (b & 0xFFF)) > 0xFFF
+    val = (a + b) & 0xFFFF
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def sub_16bit(a, b):
+    n_flag = True
+    res = add_16bit(a, -b)
+    return ALUResult(res.result, res.z_flag, n_flag, res.h_flag, not res.c_flag)
