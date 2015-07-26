@@ -5,6 +5,7 @@ class Add8BitTests(TestCase):
     def test_8bit_add(self):
         res = add_8bit(4, 4)
         self.assertEqual(res.result, 8)
+        self.assertFalse(res.n_flag)
 
     def test_8bit_add_carry_set(self):
         res = add_8bit(0xF0, 0x11)
@@ -50,6 +51,7 @@ class Sub8BitTests(TestCase):
     def test_8bit_sub(self):
         res = sub_8bit(8, 4)
         self.assertEqual(res.result, 4)
+        self.assertTrue(res.n_flag)
 
     def test_8bit_sub_carry_set(self):
         res = sub_8bit(0xF0, 0x10)
@@ -95,6 +97,7 @@ class Add16BitTests(TestCase):
     def test_16bit_add(self):
         res = add_16bit(4, 4)
         self.assertEqual(res.result, 8)
+        self.assertFalse(res.n_flag)
 
     def test_16bit_add_carry(self):
         res = add_16bit(0xF000, 0x1100)
@@ -122,6 +125,7 @@ class Sub16BitTests(TestCase):
     def test_16bit_sub(self):
         res = sub_16bit(8, 4)
         self.assertEqual(res.result, 4)
+        self.assertTrue(res.n_flag)
 
     def test_16bit_sub_carry_set(self):
         res = sub_16bit(0xF000, 0x1000)
