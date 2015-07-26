@@ -8,3 +8,6 @@ opcode table here
 
 instruction set guide here
 -marc.rawer.de/Gameboy/Docs/GBCPUman.pdf
+
+excellent info here
+-gameboy.mongenel.com/dmg/opcodes.html
