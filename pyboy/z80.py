@@ -113,24 +113,25 @@ class Z80(object):
 
     def inc_bc(self):
         self.pc += 1
-        self.bc += 1
-        self.bc &= 0xFFFF
+        self.bc = add_16bit(self.bc, 1).result
         return 8
 
     def inc_b(self):
-        self.h_flag = ((self.b & 0xF) + 1) > 0xF
-        self.b = (self.b + 1) & 0xFF
-        self.z_flag = self.b == 0
-        self.n_flag = False
         self.pc += 1
+        res = add_8bit(self.b, 1)
+        self.h_flag = res.h_flag
+        self.z_flag = res.z_flag
+        self.n_flag = res.n_flag
+        self.b = res.result
         return 4
 
     def dec_b(self):
-        self.h_flag = (self.b & 0xF0) > ((self.b - 1) & 0xF0)
-        self.b = 0xFF if self.b == 0 else (self.b - 1) & 0xFF
-        self.z_flag = self.b == 0
-        self.n_flag = True
         self.pc += 1
+        res = sub_8bit(self.b, 1)
+        self.h_flag = res.h_flag
+        self.z_flag = res.z_flag
+        self.n_flag = res.n_flag
+        self.b = res.result
         return 4
 
     def ld_b_d8(self):
@@ -157,10 +158,11 @@ class Z80(object):
 
     def add_hl_bc(self):
         self.pc += 1
-        self.n_flag = False
-        self.c_flag = (self.hl + self.bc) > 0xFFFF
-        self.h_flag = ((self.hl & 0xFFF) + (self.bc & 0xFFF)) > 0xFFF
-        self.hl = (self.hl + self.pc) & 0xFFFF
+        res = add_16bit(self.hl, self.bc)
+        self.n_flag = res.n_flag
+        self.c_flag = res.c_flag
+        self.h_flag = res.h_flag
+        self.hl = res.result
         return 8
 
     def ld_a_addr_bc(Self):
@@ -170,26 +172,25 @@ class Z80(object):
 
     def dec_bc(self):
         self.pc += 1
-        if self.bc == 0:
-            self.bc = 0xFFFF
-        else:
-            self.bc -= 1
+        self.bc = sub_16bit(self.bc, 1).result
         return 8
 
     def inc_c(self):
-        self.h_flag = ((self.c & 0xF) + 1) > 0xF
-        self.c = (self.c + 1) & 0xFF
-        self.z_flag = self.c == 0
-        self.n_flag = False
         self.pc += 1
+        res = add_8bit(self.c, 1)
+        self.h_flag = res.h_flag
+        self.z_flag = res.z_flag
+        self.n_flag = res.n_flag
+        self.c = res.result
         return 4
 
     def dec_c(self):
-        self.h_flag = (self.c & 0xF0) > ((self.c - 1) & 0xF0)
-        self.c = 0xFF if self.c == 0 else (self.c - 1) & 0xFF
-        self.z_flag = self.c == 0
-        self.n_flag = True
         self.pc += 1
+        res = sub_8bit(self.c, 1)
+        self.h_flag = res.h_flag
+        self.z_flag = res.z_flag
+        self.n_flag = res.n_flag
+        self.c = res.result
         return 4
 
     def ld_c_d8(self):
@@ -228,24 +229,25 @@ class Z80(object):
 
     def inc_de(self):
         self.pc += 1
-        self.de += 1
-        self.de &= 0xFFFF
+        self.de = add_16bit(self.de, 1).result
         return 8
 
     def inc_d(self):
-        self.h_flag = ((self.d & 0xF) + 1) > 0xF
-        self.d = (self.d + 1) & 0xFF
-        self.z_flag = self.d == 0
-        self.n_flag = False
         self.pc += 1
+        res = add_8bit(self.d, 1)
+        self.h_flag = res.h_flag
+        self.z_flag = res.z_flag
+        self.n_flag = res.n_flag
+        self.d = res.result
         return 4
 
     def dec_d(self):
-        self.h_flag = (self.d & 0xF0) > ((self.d - 1) & 0xF0)
-        self.d = 0xFF if self.d == 0 else (self.d - 1) & 0xFF
-        self.z_flag = self.d == 0
-        self.n_flag = True
         self.pc += 1
+        res = sub_8bit(self.d, 1)
+        self.h_flag = res.h_flag
+        self.z_flag = res.z_flag
+        self.n_flag = res.n_flag
+        self.d = res.result
         return 4
 
     def ld_d_d8(self):
