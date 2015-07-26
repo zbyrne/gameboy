@@ -151,11 +151,12 @@ class Z80(object):
 
     def rlca(self):
         self.pc +=1
-        self.f = 0
-        self.c_flag = bool(self.a & (1<<7))
-        self.a <<= 1
-        self.a &= 0xFF
-        self.a += int(self.c_flag)
+        res = rotate_left(self.a)
+        self.a = res.result
+        self.c_flag = res.c_flag
+        self.n_flag = res.n_flag
+        self.h_flag = res.h_flag
+        self.z_flag = res.z_flag
         return 4
 
     def ld_a16_sp(self):
@@ -210,12 +211,12 @@ class Z80(object):
 
     def rrca(self):
         self.pc +=1
-        self.f = 0
-        self.c_flag = bool(self.a & 1)
-        self.a >>= 1
-        self.a &= 0xFF
-        self.a |= int(self.c_flag) << 7
-        self.z_flag = self.a == 0
+        res = rotate_right(self.a)
+        self.a = res.result
+        self.c_flag = res.c_flag
+        self.n_flag = res.n_flag
+        self.h_flag = res.h_flag
+        self.z_flag = res.z_flag
         return 4
 
     def stop(self):
