@@ -228,24 +228,24 @@ class Z80(object):
         self.de &= 0xFFFF
         return 8
 
-    def inc_c(self):
-        self.h_flag = ((self.c & 0xF) + 1) > 0xF
-        self.c = (self.c + 1) & 0xFF
-        self.z_flag = self.c == 0
+    def inc_d(self):
+        self.h_flag = ((self.d & 0xF) + 1) > 0xF
+        self.d = (self.d + 1) & 0xFF
+        self.z_flag = self.d == 0
         self.n_flag = False
         self.pc += 1
         return 4
 
-    def dec_c(self):
-        self.h_flag = (self.c & 0xF0) > ((self.c - 1) & 0xF0)
-        self.c = 0xFF if self.c == 0 else (self.c - 1) & 0xFF
-        self.z_flag = self.c == 0
+    def dec_d(self):
+        self.h_flag = (self.d & 0xF0) > ((self.d - 1) & 0xF0)
+        self.d = 0xFF if self.d == 0 else (self.d - 1) & 0xFF
+        self.z_flag = self.d == 0
         self.n_flag = True
         self.pc += 1
         return 4
 
-    def ld_c_d8(self):
+    def ld_d_d8(self):
         self.pc += 1
-        self.c = self._mem.read_byte(self.pc)
+        self.d = self._mem.read_byte(self.pc)
         self.pc += 1
         return 8
