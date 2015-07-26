@@ -1,6 +1,7 @@
 from unittest import TestCase
-from z80 import (add_8bit, add_16bit, sub_8bit, sub_16bit, rotate_right,
-                 rotate_right_through_carry)
+from z80 import add_8bit, add_16bit, sub_8bit, sub_16bit
+from z80 import rotate_right, rotate_right_through_carry
+
 
 class Add8BitTests(TestCase):
     def test_8bit_add(self):
