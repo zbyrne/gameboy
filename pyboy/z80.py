@@ -318,3 +318,23 @@ def rotate_right_through_carry(a, c=0):
     h_flag = False
     z_flag = val == 0
     return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def rotate_left(a):
+    val = (a << 1) & 0xFF
+    val |= (a >> 7)
+    c_flag = bool(a & 0x80)
+    n_flag = False
+    h_flag = False
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def rotate_left_through_carry(a, c=0):
+    val = (a << 1) & 0xFF
+    val |= c
+    c_flag = bool(a & 0x80)
+    n_flag = False
+    h_flag = False
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
