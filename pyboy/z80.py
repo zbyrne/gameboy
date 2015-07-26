@@ -1,10 +1,25 @@
 from collections import namedtuple
+from functools import wraps
 
 
 Z_FLAG = 1 << 7
 N_FLAG = 1 << 6
 H_FLAG = 1 << 5
 C_FLAG = 1 << 4
+
+
+def op_code(cycles):
+    """
+    Decorator for methods of Z80 that implement instructions.  Causes
+    the method to return the number of clock cycles consumed.
+    """
+    def dec(fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            fn(*args, **kwargs)
+            return cycles
+        return wrapper
+    return dec
 
 
 class Z80(object):
@@ -105,26 +120,27 @@ class Z80(object):
     # Each instruction is responsible for updating PC.
     # This is to make branching simpler.
 
+    @op_code(4)
     def nop(self):
         self.pc += 1
-        return 4
 
+    @op_code(12)
     def ld_bc_d16(self):
         self.pc += 1
         self.bc = self._mem.read_word(self.pc)
         self.pc += 2
-        return 12
 
+    @op_code(8)
     def ld_addr_bc_a(self):
         self._mem.write_byte(self.a, self.bc)
         self.pc +=1
-        return 8
 
+    @op_code(8)
     def inc_bc(self):
         self.pc += 1
         self.bc = add_16bit(self.bc, 1).result
-        return 8
 
+    @op_code(4)
     def inc_b(self):
         self.pc += 1
         res = add_8bit(self.b, 1)
@@ -132,8 +148,8 @@ class Z80(object):
         self.z_flag = res.z_flag
         self.n_flag = res.n_flag
         self.b = res.result
-        return 4
 
+    @op_code(4)
     def dec_b(self):
         self.pc += 1
         res = sub_8bit(self.b, 1)
@@ -141,14 +157,14 @@ class Z80(object):
         self.z_flag = res.z_flag
         self.n_flag = res.n_flag
         self.b = res.result
-        return 4
 
+    @op_code(8)
     def ld_b_d8(self):
         self.pc += 1
         self.b = self._mem.read_byte(self.pc)
         self.pc += 1
-        return 8
 
+    @op_code(4)
     def rlca(self):
         self.pc +=1
         res = rotate_left(self.a)
@@ -157,15 +173,15 @@ class Z80(object):
         self.n_flag = res.n_flag
         self.h_flag = res.h_flag
         self.z_flag = res.z_flag
-        return 4
 
+    @op_code(20)
     def ld_a16_sp(self):
         self.pc +=1
         addr = self._mem.read_word(self.pc)
         self.pc += 2
         self._mem.write_word(self.sp, addr)
-        return 20
 
+    @op_code(8)
     def add_hl_bc(self):
         self.pc += 1
         res = add_16bit(self.hl, self.bc)
@@ -173,18 +189,18 @@ class Z80(object):
         self.c_flag = res.c_flag
         self.h_flag = res.h_flag
         self.hl = res.result
-        return 8
 
+    @op_code(8)
     def ld_a_addr_bc(Self):
         self.pc += 1
         self.a = self._mem.read_byte(self.bc)
-        return 8
 
+    @op_code(8)
     def dec_bc(self):
         self.pc += 1
         self.bc = sub_16bit(self.bc, 1).result
-        return 8
 
+    @op_code(4)
     def inc_c(self):
         self.pc += 1
         res = add_8bit(self.c, 1)
@@ -192,8 +208,8 @@ class Z80(object):
         self.z_flag = res.z_flag
         self.n_flag = res.n_flag
         self.c = res.result
-        return 4
 
+    @op_code(4)
     def dec_c(self):
         self.pc += 1
         res = sub_8bit(self.c, 1)
@@ -201,14 +217,14 @@ class Z80(object):
         self.z_flag = res.z_flag
         self.n_flag = res.n_flag
         self.c = res.result
-        return 4
 
+    @op_code(8)
     def ld_c_d8(self):
         self.pc += 1
         self.c = self._mem.read_byte(self.pc)
         self.pc += 1
-        return 8
 
+    @op_code(4)
     def rrca(self):
         self.pc +=1
         res = rotate_right(self.a)
@@ -217,31 +233,31 @@ class Z80(object):
         self.n_flag = res.n_flag
         self.h_flag = res.h_flag
         self.z_flag = res.z_flag
-        return 4
 
+    @op_code(4)
     def stop(self):
         """
         Going to have to do something silly here to stop the cpu.
         """
         self.pc += 2
-        return 4
 
+    @op_code(12)
     def ld_de_d16(self):
         self.pc += 1
         self.de = self._mem.read_word(self.pc)
         self.pc += 2
-        return 12
 
+    @op_code(8)
     def ld_addr_de_a(self):
         self._mem.write_byte(self.a, self.de)
         self.pc +=1
-        return 8
 
+    @op_code(8)
     def inc_de(self):
         self.pc += 1
         self.de = add_16bit(self.de, 1).result
-        return 8
 
+    @op_code(4)
     def inc_d(self):
         self.pc += 1
         res = add_8bit(self.d, 1)
@@ -249,8 +265,8 @@ class Z80(object):
         self.z_flag = res.z_flag
         self.n_flag = res.n_flag
         self.d = res.result
-        return 4
 
+    @op_code(4)
     def dec_d(self):
         self.pc += 1
         res = sub_8bit(self.d, 1)
@@ -258,13 +274,12 @@ class Z80(object):
         self.z_flag = res.z_flag
         self.n_flag = res.n_flag
         self.d = res.result
-        return 4
 
+    @op_code(8)
     def ld_d_d8(self):
         self.pc += 1
         self.d = self._mem.read_byte(self.pc)
         self.pc += 1
-        return 8
 
 
 ALUResult = namedtuple("ALUResult",
