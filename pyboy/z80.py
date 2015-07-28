@@ -32,6 +32,8 @@ class Z80(object):
         self.d = 0
         self.e = 0
         self.f = 0
+        self.h = 0
+        self.l = 0
         self.sp = 0
         self.pc = 0
 
