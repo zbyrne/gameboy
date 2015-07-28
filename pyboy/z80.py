@@ -127,6 +127,21 @@ class Z80(object):
         else:
             self.f &= ~C_FLAG
 
+    def set_flags(self, flag_str, result):
+        """
+        Pass in a format string that looks like "znhc" and an
+        ALUResult and the appropriate flags will be copied into the f
+        register. Yes, this is stringly typed.
+        """
+        if "z" in flag_str:
+            self.z_flag = result.z_flag
+        if "n" in flag_str:
+            self.n_flag = result.n_flag
+        if "h" in flag_str:
+            self.h_flag = result.h_flag
+        if "c" in flag_str:
+            self.c_flag = result.c_flag
+
     # Instructions
     # Return clock cycles used.
     # Each instruction is responsible for updating PC.
@@ -156,18 +171,14 @@ class Z80(object):
     def inc_b(self):
         self.pc += 1
         res = add_8bit(self.b, 1)
-        self.h_flag = res.h_flag
-        self.z_flag = res.z_flag
-        self.n_flag = res.n_flag
+        self.set_flags("znh", res)
         self.b = res.result
 
     @op_code(0x5, 4)
     def dec_b(self):
         self.pc += 1
         res = sub_8bit(self.b, 1)
-        self.h_flag = res.h_flag
-        self.z_flag = res.z_flag
-        self.n_flag = res.n_flag
+        self.set_flags("znh", res)
         self.b = res.result
 
     @op_code(0x6, 8)
@@ -180,11 +191,9 @@ class Z80(object):
     def rlca(self):
         self.pc +=1
         res = rotate_left(self.a)
+        self.set_flags("znhc", res)
         self.a = res.result
-        self.c_flag = res.c_flag
-        self.n_flag = res.n_flag
-        self.h_flag = res.h_flag
-        self.z_flag = res.z_flag
+
 
     @op_code(0x8, 20)
     def ld_a16_sp(self):
@@ -197,9 +206,7 @@ class Z80(object):
     def add_hl_bc(self):
         self.pc += 1
         res = add_16bit(self.hl, self.bc)
-        self.n_flag = res.n_flag
-        self.c_flag = res.c_flag
-        self.h_flag = res.h_flag
+        self.set_flags("nhc", res)
         self.hl = res.result
 
     @op_code(0xA, 8)
@@ -216,18 +223,14 @@ class Z80(object):
     def inc_c(self):
         self.pc += 1
         res = add_8bit(self.c, 1)
-        self.h_flag = res.h_flag
-        self.z_flag = res.z_flag
-        self.n_flag = res.n_flag
+        self.set_flags("znh", res)
         self.c = res.result
 
     @op_code(0xD, 4)
     def dec_c(self):
         self.pc += 1
         res = sub_8bit(self.c, 1)
-        self.h_flag = res.h_flag
-        self.z_flag = res.z_flag
-        self.n_flag = res.n_flag
+        self.set_flag("znh", res)
         self.c = res.result
 
     @op_code(0xE, 8)
@@ -240,11 +243,8 @@ class Z80(object):
     def rrca(self):
         self.pc +=1
         res = rotate_right(self.a)
+        self.set_flags("znhc", res)
         self.a = res.result
-        self.c_flag = res.c_flag
-        self.n_flag = res.n_flag
-        self.h_flag = res.h_flag
-        self.z_flag = res.z_flag
 
     @op_code(0x10, 4)
     def stop(self):
@@ -273,18 +273,14 @@ class Z80(object):
     def inc_d(self):
         self.pc += 1
         res = add_8bit(self.d, 1)
-        self.h_flag = res.h_flag
-        self.z_flag = res.z_flag
-        self.n_flag = res.n_flag
+        self.set_flags("znh", res)
         self.d = res.result
 
     @op_code(0x15, 4)
     def dec_d(self):
         self.pc += 1
         res = sub_8bit(self.d, 1)
-        self.h_flag = res.h_flag
-        self.z_flag = res.z_flag
-        self.n_flag = res.n_flag
+        self.set_flags("znh", res)
         self.d = res.result
 
     @op_code(0x16, 8)

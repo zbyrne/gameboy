@@ -3,6 +3,7 @@ from z80 import Z80
 from z80 import add_8bit, add_16bit, sub_8bit, sub_16bit
 from z80 import rotate_right, rotate_right_through_carry
 from z80 import rotate_left, rotate_left_through_carry
+from z80 import ALUResult
 
 
 class MockMem(dict):
@@ -38,6 +39,26 @@ class Z80Tests(TestCase):
         self.assertEqual(z.b, 1)
         self.assertEqual(z.pc, 1)
         self.assertEqual(cycles, 4)
+
+    def test_set_flags(self):
+        res1 = ALUResult(0, True, True, True, True)
+        res2 = ALUResult(0, False, False, False, False)
+        z = Z80(None)
+        z.set_flags("znhc", res1)
+        self.assertTrue(z.z_flag)
+        self.assertTrue(z.n_flag)
+        self.assertTrue(z.h_flag)
+        self.assertTrue(z.c_flag)
+        z.set_flags("znhc", res2)
+        self.assertFalse(z.z_flag)
+        self.assertFalse(z.n_flag)
+        self.assertFalse(z.h_flag)
+        self.assertFalse(z.c_flag)
+        z.set_flags("zn", res1)
+        self.assertTrue(z.z_flag)
+        self.assertTrue(z.n_flag)
+        self.assertFalse(z.h_flag)
+        self.assertFalse(z.c_flag)
 
 
 class Add8BitTests(TestCase):
