@@ -1,7 +1,43 @@
 from unittest import TestCase
+from z80 import Z80
 from z80 import add_8bit, add_16bit, sub_8bit, sub_16bit
 from z80 import rotate_right, rotate_right_through_carry
 from z80 import rotate_left, rotate_left_through_carry
+
+
+class MockMem(dict):
+    """
+    Little Endian!
+    """
+    def read_byte(self, addr):
+        x = self.get(addr, 0)
+        self[addr] = x
+        return x
+
+    def write_byte(self, val, addr):
+        self[addr] = val
+
+    def read_word(self, addr):
+        l = self.get(addr, 0)
+        self[addr] = l
+        h = self.get(addr + 1, 0)
+        self[addr + 1] = h
+        return (h << 8) + l
+
+    def write_word(self, val, addr):
+        self[addr] = val & 0xFF
+        self[addr + 1] = (val >> 8) & 0xFF
+
+
+class Z80Tests(TestCase):
+    def test_dispatch(self):
+        m = MockMem()
+        m[0] = 0x4  # inc b
+        z = Z80(m)
+        cycles = z.dispatch()
+        self.assertEqual(z.b, 1)
+        self.assertEqual(z.pc, 1)
+        self.assertEqual(cycles, 4)
 
 
 class Add8BitTests(TestCase):
