@@ -211,7 +211,7 @@ class Z80(object):
         self.hl = res.result
 
     @op_code(0xA, 8)
-    def ld_a_addr_bc(Self):
+    def ld_a_addr_bc(self):
         self.pc += 1
         self.a = self._mem.read_byte(self.bc)
 
@@ -363,6 +363,7 @@ def rotate_left_through_carry(a, c=0):
     h_flag = False
     z_flag = val == 0
     return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
 
 def signed_8bit(a):
     if a & 0x80:
