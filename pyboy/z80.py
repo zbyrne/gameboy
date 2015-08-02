@@ -8,17 +8,19 @@ H_FLAG = 1 << 5
 C_FLAG = 1 << 4
 
 
-def op_code(code, cycles):
+def op_code(code, cycles, branch_cycles=0):
     """
     Decorator for methods of Z80 that implement instructions.  Causes
-    the method to return the number of clock cycles consumed.
+    the method to return the number of clock cycles
+    consumed. Instructions that branch should return something truthy
+    and pass branch cycles to the decorator.
     """
     def dec(fn):
         setattr(fn, "op_code", code)
         @wraps(fn)
         def wrapper(*args, **kwargs):
-            fn(*args, **kwargs)
-            return cycles
+            branch = fn(*args, **kwargs)
+            return cycles if not branch else branch_cycles
         return wrapper
     return dec
 
@@ -193,7 +195,6 @@ class Z80(object):
         res = rotate_left(self.a)
         self.set_flags("znhc", res)
         self.a = res.result
-
 
     @op_code(0x8, 20)
     def ld_a16_sp(self):
