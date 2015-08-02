@@ -354,6 +354,64 @@ class Z80(object):
             return True
         self.pc += 2
 
+    @op_code(0x21, 12)
+    def ld_hl_d16(self):
+        self.pc += 1
+        self.hl = self._mem.read_word(self.pc)
+        self.pc += 2
+
+    @op_code(0x22, 8)
+    def ld_addr_hl_inc_a(self):
+        self.pc +=1
+        self._mem.write_byte(self.a, self.hl)
+        self.hl = add_16bit(self.hl, 1).result
+
+    @op_code(0x23, 8)
+    def inc_hl(self):
+        self.pc += 1
+        self.hl = add_16bit(self.hl, 1).result
+
+    @op_code(0x24, 4)
+    def inc_h(self):
+        self.pc += 1
+        res = add_8bit(self.h, 1)
+        self.set_flags("znh", res)
+        self.h = res.result
+
+    @op_code(0x25, 4)
+    def dec_h(self):
+        self.pc += 1
+        res = sub_8bit(self.h, 1)
+        self.set_flags("znh", res)
+        self.h = res.result
+
+    @op_code(0x26, 8)
+    def ld_h_d8(self):
+        self.pc += 1
+        self.h = self._mem.read_byte(self.pc)
+        self.pc += 1
+
+    @op_code(0x27, 4)
+    def daa(self):
+        """
+        This instruction makes an adjustment to correct the
+        accumulator after mathing two BCD values. There will be bugs
+        here. Might have to generate a lookup table just to be sure.
+        """
+        self.pc += 1
+        val = 0
+        if self.a & 0xF > 0x9 or self.h_flag:
+            val += 0x6
+        if self.a & 0xF0 > 0x90 or self.c_flag:
+            val += 0x60
+        if self.n_flag:
+            val = (-val) & 0xFF
+        res = add_8bit(self.a, val)
+        self.h_flag = False
+        self.z_flag = res.result == 0
+        self.c_flag = self.c_flag or res.c_flag
+        self.a = res.result
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
