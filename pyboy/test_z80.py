@@ -4,7 +4,7 @@ from z80 import add_8bit, add_16bit, sub_8bit, sub_16bit
 from z80 import rotate_right, rotate_right_through_carry
 from z80 import rotate_left, rotate_left_through_carry
 from z80 import ALUResult
-
+from z80 import signed_8bit
 
 class MockMem(dict):
     """
@@ -281,3 +281,13 @@ class RotateLeftTests(TestCase):
         self.assertEqual(res.result, 0)
         self.assertTrue(res.c_flag)
         self.assertTrue(res.z_flag)
+
+
+class Signed8BitTests(TestCase):
+    def test_positive(self):
+        res = signed_8bit(1)
+        self.assertEqual(res, 1)
+
+    def test_negative(self):
+        res = signed_8bit(0xFE)
+        self.assertEqual(res, -1)

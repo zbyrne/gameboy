@@ -363,3 +363,8 @@ def rotate_left_through_carry(a, c=0):
     h_flag = False
     z_flag = val == 0
     return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+def signed_8bit(a):
+    if a & 0x80:
+        return -(0xFF - a)
+    return a
