@@ -290,6 +290,62 @@ class Z80(object):
         self.d = self._mem.read_byte(self.pc)
         self.pc += 1
 
+    @op_code(0x17, 4)
+    def rla(self):
+        self.pc +=1
+        res = rotate_left_through_carry(self.a, int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x18, 12)
+    def jr_r8(self):
+        offset = signed_8bit(self._mem.read_byte(self.pc + 1))
+        self.pc += offset
+
+    @op_code(0x19, 8)
+    def add_hl_de(self):
+        self.pc += 1
+        res = add_16bit(self.hl, self.de)
+        self.set_flags("nhc", res)
+        self.hl = res.result
+
+    @op_code(0x1A, 8)
+    def ld_a_addr_de(self):
+        self.pc += 1
+        self.a = self._mem.read_byte(self.de)
+
+    @op_code(0x1B, 8)
+    def dec_de(self):
+        self.pc += 1
+        self.de = sub_16bit(self.bc, 1).result
+
+    @op_code(0x1C, 4)
+    def inc_e(self):
+        self.pc += 1
+        res = add_8bit(self.e, 1)
+        self.set_flags("znh", res)
+        self.e = res.result
+
+    @op_code(0x1D, 4)
+    def dec_e(self):
+        self.pc += 1
+        res = sub_8bit(self.e, 1)
+        self.set_flag("znh", res)
+        self.e = res.result
+
+    @op_code(0x1E, 8)
+    def ld_e_d8(self):
+        self.pc += 1
+        self.e = self._mem.read_byte(self.pc)
+        self.pc += 1
+
+    @op_code(0x1F, 4)
+    def rra(self):
+        self.pc +=1
+        res = rotate_right_through_carry(self.a, int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
