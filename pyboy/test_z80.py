@@ -60,6 +60,21 @@ class Z80Tests(TestCase):
         self.assertFalse(z.h_flag)
         self.assertFalse(z.c_flag)
 
+    def test_branching(self):
+        m = MockMem()
+        m[0] = 0x20
+        m[1] = 0x4
+        m[4] = 0x20
+        m[5] = 0x0
+        z = Z80(m)
+        cycles = z.dispatch()
+        self.assertEqual(cycles, 12)
+        self.assertEqual(z.pc, 4)
+        z.z_flag = True
+        cycles = z.dispatch()
+        self.assertEqual(cycles, 8)
+        self.assertEqual(z.pc, 6)
+
 
 class Add8BitTests(TestCase):
     def test_8bit_add(self):
