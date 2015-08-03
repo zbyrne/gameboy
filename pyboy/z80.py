@@ -848,6 +848,11 @@ class Z80(object):
         self.pc += 1
         # do something silly to stop the cpu.
 
+    @op_code(0x77, 8)
+    def ld_addr_hl_a(self):
+        self.pc += 1
+        self._mem.write_byte(self.a, self.hl)
+
     @op_code(0x78, 4)
     def ld_a_b(self):
         self.pc += 1
