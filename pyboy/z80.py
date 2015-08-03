@@ -1006,6 +1006,119 @@ class Z80(object):
         self.set_flags("znhc", res)
         self.a = res.result
 
+    @op_code(0x90, 4)
+    def sub_b(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.b)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x91, 4)
+    def sub_c(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.c)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x92, 4)
+    def sub_d(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.d)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x93, 4)
+    def sub_e(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.e)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x94, 4)
+    def sub_h(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.h)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x95, 4)
+    def sub_l(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.l)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x96, 8)
+    def sub_addr_hl(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x97, 4)
+    def sub_a(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.a)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x98, 4)
+    def sbc_a_b(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.b, c = int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x99, 4)
+    def sbc_a_c(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.c, c = int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x9A, 4)
+    def sbc_a_d(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.d, c = int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x9B, 4)
+    def sbc_a_e(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.e, c = int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x9C, 4)
+    def sbc_a_h(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.h, c = int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x9D, 4)
+    def sbc_a_l(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.l, c = int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x9E, 8)
+    def sbc_a_addr_hl(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self._mem.read_byte(self.hl),
+                       c = int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @op_code(0x9F, 4)
+    def sbc_a_a(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.a, c = int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
