@@ -1119,6 +1119,270 @@ class Z80(object):
         self.set_flags("znhc", res)
         self.a = res.result
 
+    @op_code(0xA0, 4)
+    def and_b(self):
+        self.pc += 1
+        self.a &= self.b
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+
+    @op_code(0xA1, 4)
+    def and_c(self):
+        self.pc += 1
+        self.a &= self.c
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+
+    @op_code(0xA2, 4)
+    def and_d(self):
+        self.pc += 1
+        self.a &= self.d
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+
+    @op_code(0xA3, 4)
+    def and_e(self):
+        self.pc += 1
+        self.a &= self.e
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+
+    @op_code(0xA4, 4)
+    def and_h(self):
+        self.pc += 1
+        self.a &= self.h
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+
+    @op_code(0xA5, 4)
+    def and_l(self):
+        self.pc += 1
+        self.a &= self.l
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+
+    @op_code(0xA6, 8)
+    def and_addr_hl(self):
+        self.pc += 1
+        self.a &= self._mem.read_byte(self.hl)
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+
+    @op_code(0xA7, 4)
+    def and_a(self):
+        self.pc += 1
+        self.a &= self.a
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+
+    @op_code(0xA8, 4)
+    def xor_b(self):
+        self.pc += 1
+        self.a ^= self.b
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xA9, 4)
+    def xor_c(self):
+        self.pc += 1
+        self.a ^= self.c
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xAA, 4)
+    def xor_d(self):
+        self.pc += 1
+        self.a ^= self.d
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xAB, 4)
+    def xor_e(self):
+        self.pc += 1
+        self.a ^= self.e
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xAC, 4)
+    def xor_h(self):
+        self.pc += 1
+        self.a ^= self.h
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xAD, 4)
+    def xor_l(self):
+        self.pc += 1
+        self.a ^= self.l
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xAE, 8)
+    def xor_addr_hl(self):
+        self.pc += 1
+        self.a ^= self._mem.read_byte(self.hl)
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xAF, 4)
+    def xor_a(self):
+        self.pc += 1
+        self.a ^= self.a
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xB0, 4)
+    def or_b(self):
+        self.pc += 1
+        self.a |= self.b
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xB1, 4)
+    def or_c(self):
+        self.pc += 1
+        self.a |= self.c
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xB2, 4)
+    def or_d(self):
+        self.pc += 1
+        self.a |= self.d
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xB3, 4)
+    def or_e(self):
+        self.pc += 1
+        self.a |= self.e
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xB4, 4)
+    def or_h(self):
+        self.pc += 1
+        self.a |= self.h
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xB5, 4)
+    def or_l(self):
+        self.pc += 1
+        self.a |= self.l
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xB6, 8)
+    def or_addr_hl(self):
+        self.pc += 1
+        self.a |= self._mem.read_byte(self.hl)
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xB7, 4)
+    def or_a(self):
+        self.pc += 1
+        self.a |= self.a
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+
+    @op_code(0xB8, 4)
+    def cp_b(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.b)
+        self.set_flags("znhc", res)
+
+    @op_code(0xB9, 4)
+    def cp_c(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.c)
+        self.set_flags("znhc", res)
+
+    @op_code(0xBA, 4)
+    def cp_d(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.d)
+        self.set_flags("znhc", res)
+
+    @op_code(0xBB, 4)
+    def cp_e(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.e)
+        self.set_flags("znhc", res)
+
+    @op_code(0xBC, 4)
+    def cp_h(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.h)
+        self.set_flags("znhc", res)
+
+    @op_code(0xBD, 4)
+    def cp_l(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.l)
+        self.set_flags("znhc", res)
+
+    @op_code(0xBE, 8)
+    def cp_addr_hl(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+
+    @op_code(0xBF, 4)
+    def cp_a(self):
+        self.pc += 1
+        res = sub_8bit(self.a, self.a)
+        self.set_flags("znhc", res)
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
