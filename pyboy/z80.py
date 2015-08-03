@@ -231,7 +231,7 @@ class Z80(object):
     def dec_c(self):
         self.pc += 1
         res = sub_8bit(self.c, 1)
-        self.set_flag("znh", res)
+        self.set_flags("znh", res)
         self.c = res.result
 
     @op_code(0xE, 8)
@@ -317,7 +317,7 @@ class Z80(object):
     @op_code(0x1B, 8)
     def dec_de(self):
         self.pc += 1
-        self.de = sub_16bit(self.bc, 1).result
+        self.de = sub_16bit(self.de, 1).result
 
     @op_code(0x1C, 4)
     def inc_e(self):
@@ -330,7 +330,7 @@ class Z80(object):
     def dec_e(self):
         self.pc += 1
         res = sub_8bit(self.e, 1)
-        self.set_flag("znh", res)
+        self.set_flags("znh", res)
         self.e = res.result
 
     @op_code(0x1E, 8)
@@ -411,6 +411,52 @@ class Z80(object):
         self.z_flag = res.result == 0
         self.c_flag = self.c_flag or res.c_flag
         self.a = res.result
+
+    @op_code(0x28, 8, branch_cycles=12)
+    def jr_z_r8(self):
+        offset = signed_8bit(self._mem.read_byte(self.pc + 1))
+        if self.z_flag:
+            self.pc += offset
+            return True
+        self.pc += 2
+
+    @op_code(0x29, 8)
+    def add_hl_hl(self):
+        self.pc += 1
+        res = add_16bit(self.hl, self.hl)
+        self.set_flags("nhc", res)
+        self.hl = res.result
+
+    @op_code(0x2A, 8)
+    def ld_a_addr_hl_inc(self):
+        self.pc += 1
+        self.a = self._mem.read_byte(self.hl)
+        self.hl = add_16bit(self.hl, 1).result
+
+    @op_code(0x2B, 8)
+    def dec_hl(self):
+        self.pc += 1
+        self.dl = sub_16bit(self.hl, 1).result
+
+    @op_code(0x2C, 4)
+    def inc_l(self):
+        self.pc += 1
+        res = add_8bit(self.l, 1)
+        self.set_flags("znh", res)
+        self.l = res.result
+
+    @op_code(0x1D, 4)
+    def dec_l(self):
+        self.pc += 1
+        res = sub_8bit(self.l, 1)
+        self.set_flags("znh", res)
+        self.l = res.result
+
+    @op_code(0x1E, 8)
+    def ld_l_d8(self):
+        self.pc += 1
+        self.l = self._mem.read_byte(self.pc)
+        self.pc += 1
 
 
 ALUResult = namedtuple("ALUResult",
