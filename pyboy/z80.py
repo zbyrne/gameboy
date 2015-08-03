@@ -465,6 +465,429 @@ class Z80(object):
         self.h_flag = True
         self.a = self.a ^ 0xFF
 
+    @op_code(0x30, 8, branch_cycles=12)
+    def jr_nc_r8(self):
+        offset = signed_8bit(self._mem.read_byte(self.pc + 1))
+        if not self.c_flag:
+            self.pc += offset
+            return True
+        self.pc += 2
+
+    @op_code(0x31, 12)
+    def ld_sp_d16(self):
+        self.pc += 1
+        self.sp = self._mem.read_word(self.pc)
+        self.pc += 2
+
+    @op_code(0x32, 8)
+    def ld_addr_hl_dec_a(self):
+        self.pc +=1
+        self._mem.write_byte(self.a, self.hl)
+        self.hl = sub_16bit(self.hl, 1).result
+
+    @op_code(0x33, 8)
+    def inc_sp(self):
+        self.pc += 1
+        self.sp = add_16bit(self.sp, 1).result
+
+    @op_code(0x34, 12)
+    def inc_addr_hl(self):
+        self.pc += 1
+        val = self._mem.read_byte(self.hl)
+        res = add_8bit(val, 1)
+        self.set_flags("znh", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @op_code(0x35, 4)
+    def dec_addr_hl(self):
+        self.pc += 1
+        val = self._mem.read_byte(self.hl)
+        res = sub_8bit(val, 1)
+        self.set_flags("znh", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @op_code(0x36, 12)
+    def ld_addr_hl_d8(self):
+        self.pc += 1
+        val = self._mem.read_byte(self.pc)
+        self.pc += 1
+        self._mem.write_byte(val, self.hl)
+
+    @op_code(0x37, 4)
+    def scf(self):
+        self.pc += 1
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = True
+
+    @op_code(0x38, 8, branch_cycles=12)
+    def jr_c_r8(self):
+        offset = signed_8bit(self._mem.read_byte(self.pc + 1))
+        if self.c_flag:
+            self.pc += offset
+            return True
+        self.pc += 2
+
+    @op_code(0x39, 8)
+    def add_hl_sp(self):
+        self.pc += 1
+        res = add_16bit(self.hl, self.sp)
+        self.set_flags("nhc", res)
+        self.hl = res.result
+
+    @op_code(0x3A, 8)
+    def ld_a_addr_hl_dec(self):
+        self.pc += 1
+        self.a = self._mem.read_byte(self.hl)
+        self.hl = sub_16bit(self.hl, 1).result
+
+    @op_code(0x3B, 8)
+    def dec_sp(self):
+        self.pc += 1
+        self.sp = sub_16bit(self.sp, 1).result
+
+    @op_code(0x3C, 4)
+    def inc_a(self):
+        self.pc += 1
+        res = add_8bit(self.a, 1)
+        self.set_flags("znh", res)
+        self.a = res.result
+
+    @op_code(0x3D, 4)
+    def dec_a(self):
+        self.pc += 1
+        res = sub_8bit(self.a, 1)
+        self.set_flags("znh", res)
+        self.a = res.result
+
+    @op_code(0x3E, 8)
+    def ld_a_d8(self):
+        self.pc += 1
+        self.a = self._mem.read_byte(self.pc)
+        self.pc += 1
+
+    @op_code(0x3F, 4)
+    def ccf(self):
+        self.pc += 1
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = not self.c_flag
+
+    @op_code(0x40, 4)
+    def ld_b_b(self):
+        self.pc += 1
+        self.b = self.b
+
+    @op_code(0x41, 4)
+    def ld_b_c(self):
+        self.pc += 1
+        self.b = self.c
+
+    @op_code(0x42, 4)
+    def ld_b_d(self):
+        self.pc += 1
+        self.b = self.d
+
+    @op_code(0x43, 4)
+    def ld_b_e(self):
+        self.pc += 1
+        self.b = self.e
+
+    @op_code(0x44, 4)
+    def ld_b_h(self):
+        self.pc += 1
+        self.b = self.h
+
+    @op_code(0x45, 4)
+    def ld_b_l(self):
+        self.pc += 1
+        self.b = self.l
+
+    @op_code(0x46, 8)
+    def ld_b_addr_hl(self):
+        self.pc += 1
+        self.b = self._mem.read_byte(self.hl)
+
+    @op_code(0x47, 4)
+    def ld_b_a(self):
+        self.pc += 1
+        self.b = self.a
+
+    @op_code(0x48, 4)
+    def ld_c_b(self):
+        self.pc += 1
+        self.c = self.b
+
+    @op_code(0x49, 4)
+    def ld_c_c(self):
+        self.pc += 1
+        self.c = self.c
+
+    @op_code(0x4A, 4)
+    def ld_c_d(self):
+        self.pc += 1
+        self.c = self.d
+
+    @op_code(0x4B, 4)
+    def ld_c_e(self):
+        self.pc += 1
+        self.c = self.e
+
+    @op_code(0x4C, 4)
+    def ld_c_h(self):
+        self.pc += 1
+        self.c = self.h
+
+    @op_code(0x4D, 4)
+    def ld_c_l(self):
+        self.pc += 1
+        self.c = self.l
+
+    @op_code(0x4E, 8)
+    def ld_c_addr_hl(self):
+        self.pc += 1
+        self.c = self._mem.read_byte(self.hl)
+
+    @op_code(0x4F, 4)
+    def ld_c_a(self):
+        self.pc += 1
+        self.c = self.a
+
+    @op_code(0x50, 4)
+    def ld_d_b(self):
+        self.pc += 1
+        self.d = self.b
+
+    @op_code(0x51, 4)
+    def ld_d_c(self):
+        self.pc += 1
+        self.d = self.c
+
+    @op_code(0x52, 4)
+    def ld_d_d(self):
+        self.pc += 1
+        self.d = self.d
+
+    @op_code(0x53, 4)
+    def ld_d_e(self):
+        self.pc += 1
+        self.d = self.e
+
+    @op_code(0x54, 4)
+    def ld_d_h(self):
+        self.pc += 1
+        self.d = self.h
+
+    @op_code(0x55, 4)
+    def ld_d_l(self):
+        self.pc += 1
+        self.d = self.l
+
+    @op_code(0x56, 8)
+    def ld_d_addr_hl(self):
+        self.pc += 1
+        self.d = self._mem.read_byte(self.hl)
+
+    @op_code(0x57, 4)
+    def ld_d_a(self):
+        self.pc += 1
+        self.d = self.a
+
+    @op_code(0x58, 4)
+    def ld_e_b(self):
+        self.pc += 1
+        self.e = self.b
+
+    @op_code(0x59, 4)
+    def ld_e_c(self):
+        self.pc += 1
+        self.e = self.c
+
+    @op_code(0x5A, 4)
+    def ld_e_d(self):
+        self.pc += 1
+        self.e = self.d
+
+    @op_code(0x5B, 4)
+    def ld_e_e(self):
+        self.pc += 1
+        self.e = self.e
+
+    @op_code(0x5C, 4)
+    def ld_e_h(self):
+        self.pc += 1
+        self.e = self.h
+
+    @op_code(0x5D, 4)
+    def ld_e_l(self):
+        self.pc += 1
+        self.e = self.l
+
+    @op_code(0x5E, 8)
+    def ld_e_addr_hl(self):
+        self.pc += 1
+        self.e = self._mem.read_byte(self.hl)
+
+    @op_code(0x5F, 4)
+    def ld_e_a(self):
+        self.pc += 1
+        self.e = self.a
+
+    @op_code(0x60, 4)
+    def ld_h_b(self):
+        self.pc += 1
+        self.h = self.b
+
+    @op_code(0x61, 4)
+    def ld_h_c(self):
+        self.pc += 1
+        self.h = self.c
+
+    @op_code(0x62, 4)
+    def ld_h_d(self):
+        self.pc += 1
+        self.h = self.d
+
+    @op_code(0x63, 4)
+    def ld_h_e(self):
+        self.pc += 1
+        self.h = self.e
+
+    @op_code(0x64, 4)
+    def ld_h_h(self):
+        self.pc += 1
+        self.h = self.h
+
+    @op_code(0x65, 4)
+    def ld_h_l(self):
+        self.pc += 1
+        self.h = self.l
+
+    @op_code(0x66, 8)
+    def ld_h_addr_hl(self):
+        self.pc += 1
+        self.h = self._mem.read_byte(self.hl)
+
+    @op_code(0x67, 4)
+    def ld_h_a(self):
+        self.pc += 1
+        self.h = self.a
+
+    @op_code(0x68, 4)
+    def ld_l_b(self):
+        self.pc += 1
+        self.l = self.b
+
+    @op_code(0x69, 4)
+    def ld_l_c(self):
+        self.pc += 1
+        self.l = self.c
+
+    @op_code(0x6A, 4)
+    def ld_l_d(self):
+        self.pc += 1
+        self.l = self.d
+
+    @op_code(0x6B, 4)
+    def ld_l_e(self):
+        self.pc += 1
+        self.l = self.e
+
+    @op_code(0x6C, 4)
+    def ld_l_h(self):
+        self.pc += 1
+        self.l = self.h
+
+    @op_code(0x6D, 4)
+    def ld_l_l(self):
+        self.pc += 1
+        self.l = self.l
+
+    @op_code(0x6E, 8)
+    def ld_l_addr_hl(self):
+        self.pc += 1
+        self.l = self._mem.read_byte(self.hl)
+
+    @op_code(0x6F, 4)
+    def ld_l_a(self):
+        self.pc += 1
+        self.l = self.a
+
+    @op_code(0x70, 8)
+    def ld_addr_hl_b(self):
+        self.pc += 1
+        self._mem.write_byte(self.b, self.hl)
+
+    @op_code(0x71, 8)
+    def ld_addr_hl_c(self):
+        self.pc += 1
+        self._mem.write_byte(self.c, self.hl)
+
+    @op_code(0x72, 8)
+    def ld_addr_hl_d(self):
+        self.pc += 1
+        self._mem.write_byte(self.d, self.hl)
+
+    @op_code(0x73, 8)
+    def ld_addr_hl_e(self):
+        self.pc += 1
+        self._mem.write_byte(self.e, self.hl)
+
+    @op_code(0x74, 8)
+    def ld_addr_hl_h(self):
+        self.pc += 1
+        self._mem.write_byte(self.h, self.hl)
+
+    @op_code(0x75, 8)
+    def ld_addr_hl_l(self):
+        self.pc += 1
+        self._mem.write_byte(self.l, self.hl)
+
+    @op_code(0x76, 4)
+    def halt(self):
+        self.pc += 1
+        # do something silly to stop the cpu.
+
+    @op_code(0x78, 4)
+    def ld_a_b(self):
+        self.pc += 1
+        self.a = self.b
+
+    @op_code(0x79, 4)
+    def ld_a_c(self):
+        self.pc += 1
+        self.a = self.c
+
+    @op_code(0x7A, 4)
+    def ld_a_d(self):
+        self.pc += 1
+        self.a = self.d
+
+    @op_code(0x7B, 4)
+    def ld_a_e(self):
+        self.pc += 1
+        self.a = self.e
+
+    @op_code(0x7C, 4)
+    def ld_a_h(self):
+        self.pc += 1
+        self.a = self.h
+
+    @op_code(0x7D, 4)
+    def ld_a_l(self):
+        self.pc += 1
+        self.a = self.l
+
+    @op_code(0x7E, 8)
+    def ld_a_addr_hl(self):
+        self.pc += 1
+        self.a = self._mem.read_byte(self.hl)
+
+    @op_code(0x7F, 4)
+    def ld_a_a(self):
+        self.pc += 1
+        self.a = self.a
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
