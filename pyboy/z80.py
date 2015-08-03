@@ -436,7 +436,7 @@ class Z80(object):
     @op_code(0x2B, 8)
     def dec_hl(self):
         self.pc += 1
-        self.dl = sub_16bit(self.hl, 1).result
+        self.hl = sub_16bit(self.hl, 1).result
 
     @op_code(0x2C, 4)
     def inc_l(self):
@@ -445,14 +445,14 @@ class Z80(object):
         self.set_flags("znh", res)
         self.l = res.result
 
-    @op_code(0x1D, 4)
+    @op_code(0x2D, 4)
     def dec_l(self):
         self.pc += 1
         res = sub_8bit(self.l, 1)
         self.set_flags("znh", res)
         self.l = res.result
 
-    @op_code(0x1E, 8)
+    @op_code(0x2E, 8)
     def ld_l_d8(self):
         self.pc += 1
         self.l = self._mem.read_byte(self.pc)
