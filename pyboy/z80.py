@@ -458,6 +458,13 @@ class Z80(object):
         self.l = self._mem.read_byte(self.pc)
         self.pc += 1
 
+    @op_code(0x2F, 4)
+    def cpl(self):
+        self.pc += 1
+        self.n_flag = True
+        self.h_flag = True
+        self.a = self.a ^ 0xFF
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
