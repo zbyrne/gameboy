@@ -1392,6 +1392,35 @@ class Z80(object):
             return True
         self.pc +=1
 
+    @op_code(0xC1, 12)
+    def pop_bc(self):
+        self.pc += 1
+        self.bc = self._mem.read_word(self.sp)
+        self.sp +=2
+
+    @op_code(0xC2, 12, branch_cycles=16)
+    def jp_nz_a16(self):
+        if not self.z_flag:
+            addr = self._mem.read_word(self.pc + 1)
+            self.pc = addr
+            return True
+        self.pc += 3
+
+    @op_code(0xC3, 16)
+    def jp_a16(self):
+        addr = self._mem.read_word(self.pc + 1)
+        self.pc = addr
+
+    @op_code(0xC4, 12, branch_cycles=24)
+    def call_nz_a16(self):
+        if not self.z_flag:
+            addr = self._mem.read_word(self.pc + 1)
+            self.sp -= 2
+            self._mem.write_word(self.pc + 3, self.sp)
+            self.pc = addr
+            return True
+        self.pc += 3
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
