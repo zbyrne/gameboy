@@ -1383,6 +1383,15 @@ class Z80(object):
         res = sub_8bit(self.a, self.a)
         self.set_flags("znhc", res)
 
+    @op_code(0xC0, 8, branch_cycles=20)
+    def ret_nz(self):
+        if not self.z_flag:
+            addr = self._mem.read_word(self.sp)
+            self.sp +=2
+            self.pc = addr
+            return True
+        self.pc +=1
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])

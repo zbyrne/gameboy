@@ -83,6 +83,18 @@ class Z80Tests(TestCase):
         cycles = z.dispatch()
         self.assertEqual(z.a, 0x42)
 
+    def test_return(self):
+        m = MockMem()
+        m[0] = 0xC0 # ret_nz
+        m[8] = 0x55
+        m[9] = 0xAA
+        z = Z80(m)
+        z.sp = 8
+        cycles = z.dispatch()
+        self.assertEqual(cycles, 20)
+        self.assertEqual(z.sp, 10)
+        self.assertEqual(z.pc, 0xAA55)
+
 
 class Add8BitTests(TestCase):
     def test_8bit_add(self):
