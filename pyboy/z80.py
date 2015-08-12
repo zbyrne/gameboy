@@ -44,6 +44,7 @@ class Z80(object):
             attr = getattr(self, attr)
             if hasattr(attr, "op_code"):
                 self.op_map[attr.op_code] = attr
+        self.extra_ops_map = {}
 
     def dispatch(self):
         instruction = self._mem.read_byte(self.pc)
@@ -1426,6 +1427,83 @@ class Z80(object):
             self.pc = addr
             return True
         self.pc += 3
+
+    @op_code(0xC5, 16)
+    def pop_bc(self):
+        self.pc += 1
+        self._push(self.bc)
+
+    @op_code(0xC6, 8)
+    def add_a_d8(self):
+        val = self._mem.read_byte(self.pc + 1)
+        res = add_8bit(self.a, val)
+        self.set_flags("znhc", res)
+        self.a = res.result
+        self.pc += 2
+
+    @op_code(0xC7, 16)
+    def rst_0x00(self):
+        self._push(self.pc)
+        self.pc = 0x00
+
+    @op_code(0xC8, 8, branch_cycles=20)
+    def ret_z(self):
+        if self.z_flag:
+            addr = self._pop()
+            self.pc = addr
+            return True
+        self.pc +=1
+
+    @op_code(0xC9, 16)
+    def ret(self):
+        addr = self._pop()
+        self.pc = addr
+
+    @op_code(0xCA, 12, branch_cycles=16)
+    def jp_z_a16(self):
+        if self.z_flag:
+            addr = self._mem.read_word(self.pc + 1)
+            self.pc = addr
+            return True
+        self.pc += 3
+
+    @op_code(0xCB, 8, branch_cycles=16)
+    def extra_ops(self):
+        op = self._mem.read_byte(self.pc + 1)
+        self.pc += 2
+        self.extra_ops_map[op]()
+        # All extra ops take 8 cycles except the ones whose bottom 3
+        # bits are 110 affecting the contents of (HL), which take
+        # 16. So treat this like branching.
+        return (op & 0x7) == 0x6
+
+    @op_code(0xCC, 12, branch_cycles=24)
+    def call_z_a16(self):
+        if self.z_flag:
+            addr = self._mem.read_word(self.pc + 1)
+            self._push(self.pc + 3)
+            self.pc = addr
+            return True
+        self.pc += 3
+
+    @op_code(0xCD, 24)
+    def call_a16(self):
+        addr = self._mem.read_word(self.pc + 1)
+        self._push(self.pc + 3)
+        self.pc = addr
+
+    @op_code(0xCE, 4)
+    def adc_a_d8(self):
+        val = self._mem.read_byte(self.pc + 1)
+        res = add_8bit(self.a, val, c=int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+        self.pc += 2
+
+    @op_code(0xCF, 16)
+    def rst_0x08(self):
+        self._push(self.pc)
+        self.pc = 0x08
 
 
 ALUResult = namedtuple("ALUResult",
