@@ -62,18 +62,18 @@ class Z80Tests(TestCase):
 
     def test_branching(self):
         m = MockMem()
-        m[0] = 0x20
+        m[0] = 0x20 # jr nz 4
         m[1] = 0x4
-        m[4] = 0x20
-        m[5] = 0x0
+        m[6] = 0x20
+        m[7] = 0x0
         z = Z80(m)
         cycles = z.dispatch()
         self.assertEqual(cycles, 12)
-        self.assertEqual(z.pc, 4)
+        self.assertEqual(z.pc, 6)
         z.z_flag = True
         cycles = z.dispatch()
         self.assertEqual(cycles, 8)
-        self.assertEqual(z.pc, 6)
+        self.assertEqual(z.pc, 8)
 
     def test_daa(self):
         m = MockMem()

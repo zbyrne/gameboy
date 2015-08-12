@@ -309,7 +309,8 @@ class Z80(object):
 
     @op_code(0x18, 12)
     def jr_r8(self):
-        offset = signed_8bit(self._mem.read_byte(self.pc + 1))
+        self.pc += 2
+        offset = signed_8bit(self._mem.read_byte(self.pc - 1))
         self.pc += offset
 
     @op_code(0x19, 8)
@@ -358,11 +359,11 @@ class Z80(object):
 
     @op_code(0x20, 8, branch_cycles=12)
     def jr_nz_r8(self):
-        offset = signed_8bit(self._mem.read_byte(self.pc + 1))
+        self.pc += 2
+        offset = signed_8bit(self._mem.read_byte(self.pc - 1))
         if not self.z_flag:
             self.pc += offset
             return True
-        self.pc += 2
 
     @op_code(0x21, 12)
     def ld_hl_d16(self):
@@ -424,11 +425,11 @@ class Z80(object):
 
     @op_code(0x28, 8, branch_cycles=12)
     def jr_z_r8(self):
-        offset = signed_8bit(self._mem.read_byte(self.pc + 1))
+        self.pc += 2
+        offset = signed_8bit(self._mem.read_byte(self.pc - 1))
         if self.z_flag:
             self.pc += offset
             return True
-        self.pc += 2
 
     @op_code(0x29, 8)
     def add_hl_hl(self):
@@ -477,11 +478,11 @@ class Z80(object):
 
     @op_code(0x30, 8, branch_cycles=12)
     def jr_nc_r8(self):
-        offset = signed_8bit(self._mem.read_byte(self.pc + 1))
+        self.pc += 2
+        offset = signed_8bit(self._mem.read_byte(self.pc - 1))
         if not self.c_flag:
             self.pc += offset
             return True
-        self.pc += 2
 
     @op_code(0x31, 12)
     def ld_sp_d16(self):
@@ -532,11 +533,11 @@ class Z80(object):
 
     @op_code(0x38, 8, branch_cycles=12)
     def jr_c_r8(self):
-        offset = signed_8bit(self._mem.read_byte(self.pc + 1))
+        self.pc += 2
+        offset = signed_8bit(self._mem.read_byte(self.pc - 1))
         if self.c_flag:
             self.pc += offset
             return True
-        self.pc += 2
 
     @op_code(0x39, 8)
     def add_hl_sp(self):
