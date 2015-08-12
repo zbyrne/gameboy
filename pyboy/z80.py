@@ -1506,6 +1506,245 @@ class Z80(object):
         self._push(self.pc)
         self.pc = 0x08
 
+    @op_code(0xD0, 8, branch_cycles=20)
+    def ret_nc(self):
+        if not self.c_flag:
+            addr = self._pop()
+            self.pc = addr
+            return True
+        self.pc +=1
+
+    @op_code(0xD1, 12)
+    def pop_de(self):
+        self.pc += 1
+        self.de = self._pop()
+
+    @op_code(0xD2, 12, branch_cycles=16)
+    def jp_nc_a16(self):
+        if not self.c_flag:
+            addr = self._mem.read_word(self.pc + 1)
+            self.pc = addr
+            return True
+        self.pc += 3
+
+    @op_code(0xD4, 12, branch_cycles=24)
+    def call_nc_a16(self):
+        if not self.c_flag:
+            addr = self._mem.read_word(self.pc + 1)
+            self._push(self.pc + 3)
+            self.pc = addr
+            return True
+        self.pc += 3
+
+    @op_code(0xD5, 16)
+    def push_de(self):
+        self.pc += 1
+        self._push(self.de)
+
+    @op_code(0xD6, 8)
+    def sub_d8(self):
+        val = self._mem.read_byte(self.pc + 1)
+        res = sub_8bit(self.a, val)
+        self.set_flags("znhc", res)
+        self.a = res.result
+        self.pc += 2
+
+    @op_code(0xD7, 16)
+    def rst_0x10(self):
+        self._push(self.pc)
+        self.pc = 0x10
+
+    @op_code(0xD8, 8, branch_cycles=20)
+    def ret_c(self):
+        if self.c_flag:
+            addr = self._pop()
+            self.pc = addr
+            return True
+        self.pc +=1
+
+    @op_code(0xD9, 16)
+    def reti(self):
+        # enable interrupts
+        addr = self._pop()
+        self.pc = addr
+
+    @op_code(0xDA, 12, branch_cycles=16)
+    def jp_c_a16(self):
+        if self.c_flag:
+            addr = self._mem.read_word(self.pc + 1)
+            self.pc = addr
+            return True
+        self.pc += 3
+
+    @op_code(0xDC, 12, branch_cycles=24)
+    def call_c_a16(self):
+        if self.c_flag:
+            addr = self._mem.read_word(self.pc + 1)
+            self._push(self.pc + 3)
+            self.pc = addr
+            return True
+        self.pc += 3
+
+    @op_code(0xDE, 8)
+    def sbc_d8(self):
+        val = self._mem.read_byte(self.pc + 1)
+        res = sub_8bit(self.a, val, c=int(self.c_flag))
+        self.set_flags("znhc", res)
+        self.a = res.result
+        self.pc += 2
+
+    @op_code(0xDF, 16)
+    def rst_0x18(self):
+        self._push(self.pc)
+        self.pc = 0x18
+
+    @op_code(0xE0, 12)
+    def ldh_a8_a(self):
+        addr = 0xFF00 + self._mem.read_byte(self.pc + 1)
+        self._mem.write_byte(self.a, addr)
+        self.pc += 2
+
+    @op_code(0xE1, 12)
+    def pop_hl(self):
+        self.pc += 1
+        self.hl = self._pop()
+
+    @op_code(0xE2, 8)
+    def ld_addr_c_a(self):
+        self._mem.write_byte(self.a, 0xFF00 + self.c)
+        self.pc += 2
+
+    @op_code(0xE5, 16)
+    def push_hl(self):
+        self.pc += 1
+        self._push(self.hl)
+
+    @op_code(0xE6, 8)
+    def and_d8(self):
+        val = self._mem.read_byte(self.pc + 1)
+        self.a &= val
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+        self.pc += 2
+
+    @op_code(0xE7, 16)
+    def rst_0x20(self):
+        self._push(self.pc)
+        self.pc = 0x20
+
+    @op_code(0xE8, 16)
+    def add_sp_r8(self):
+        val = signed_8bit(self._mem.read_byte(self.pc + 1))
+        res = add_16bit(self.sp, val)
+        self.set_flags("hc", res)
+        self.z_flag = False
+        self.n_flag = False
+        self.pc = res.result
+        self.ps += 2
+
+    @op_code(0xE9, 4)
+    def jp_addr_hl(self):
+        addr = self._mem.read_word(self.hl)
+        self.pc = addr
+
+    @op_code(0xEA, 16)
+    def ldh_a8_a(self):
+        addr = self._mem.read_word(self.pc + 1)
+        self._mem.write_byte(self.a, addr)
+        self.pc += 3
+
+    @op_code(0xEE, 8)
+    def xor_d8(self):
+        val = self._mem.read_byte(self.pc + 1)
+        self.a ^= val
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = False
+        self.c_flag = False
+        self.pc += 2
+
+    @op_code(0xEF, 16)
+    def rst_0x28(self):
+        self._push(self.pc)
+        self.pc = 0x28
+
+    @op_code(0xF0, 12)
+    def ldh_a_a8(self):
+        addr = 0xFF00 + self._mem.read_byte(self.pc + 1)
+        self.a = self._mem.read_byte(addr)
+        self.pc += 2
+
+    @op_code(0xF1, 12)
+    def pop_AF(self):
+        self.pc += 1
+        self.af = self._pop()
+
+    @op_code(0xF2, 8)
+    def ld_a_addr_c(self):
+        self.a = self._mem.read_byte(0xFF00 + self.c)
+        self.pc += 2
+
+    @op_code(0xF3, 4)
+    def di(self):
+        # disable interrupts
+        pass
+
+    @op_code(0xF5, 16)
+    def push_af(self):
+        self.pc += 1
+        self._push(self.af)
+
+    @op_code(0xF6, 8)
+    def or_d8(self):
+        val = self._mem.read_byte(self.pc + 1)
+        self.a |= val
+        self.z_flag = self.a == 0
+        self.n_flag = False
+        self.h_flag = True
+        self.c_flag = False
+        self.pc += 2
+
+    @op_code(0xF7, 16)
+    def rst_0x30(self):
+        self._push(self.pc)
+        self.pc = 0x30
+
+    @op_code(0xF8, 12)
+    def ld_hl_sp_r8(self):
+        val = signed_8bit(self._mem.read_byte(self.pc + 1))
+        self.hl = add_16bit(self.sp, val).result
+        self.pc += 2
+
+    @op_code(0xF9, 8)
+    def ld_sp_hl(self):
+        self.sp = self.hl
+        self.pc += 1
+
+    @op_code(0xFA, 16)
+    def ldh_a_a8(self):
+        addr = self._mem.read_word(self.pc + 1)
+        self.a = self._mem.read_byte(addr)
+        self.pc += 3
+
+    @op_code(0xFB, 4)
+    def ei(self):
+        # enable interrupts
+        pass
+
+    @op_code(0xFE, 8)
+    def cp_d8(self):
+        val = self._mem.read_byte(self.pc + 1)
+        res = sub_8bit(self.a, self.a)
+        self.set_flags("znhc", res)
+        self.pc += 2
+
+    @op_code(0xFF, 16)
+    def rst_0x38(self):
+        self._push(self.pc)
+        self.pc = 0x38
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
