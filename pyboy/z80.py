@@ -1522,7 +1522,7 @@ def add_8bit(a, b, c=0):
 def sub_8bit(a, b, c=0):
     n_flag = True
     res = add_8bit(a, -(b + c))
-    return ALUResult(res.result, res.z_flag, n_flag, res.h_flag, not res.c_flag)
+    return ALUResult(res.result, res.z_flag, n_flag, res.h_flag, res.c_flag)
 
 
 def add_16bit(a, b):
@@ -1537,7 +1537,7 @@ def add_16bit(a, b):
 def sub_16bit(a, b):
     n_flag = True
     res = add_16bit(a, -b)
-    return ALUResult(res.result, res.z_flag, n_flag, res.h_flag, not res.c_flag)
+    return ALUResult(res.result, res.z_flag, n_flag, res.h_flag, res.c_flag)
 
 
 def rotate_right(a):

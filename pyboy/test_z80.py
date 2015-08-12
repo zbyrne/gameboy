@@ -166,15 +166,15 @@ class Sub8BitTests(TestCase):
         self.assertEqual(res.result, 4)
         self.assertTrue(res.n_flag)
 
-    def test_8bit_sub_carry_set(self):
+    def test_8bit_sub_carry_clear(self):
         res = sub_8bit(0xF0, 0x10)
         self.assertEqual(res.result, 0xE0)
-        self.assertTrue(res.c_flag)
+        self.assertFalse(res.c_flag)
 
-    def test_8bit_sub_carry_clear(self):
+    def test_8bit_sub_carry_set(self):
         res = sub_8bit(0xE0, 0xF0)
         self.assertEqual(res.result, 0xF0)
-        self.assertFalse(res.c_flag)
+        self.assertTrue(res.c_flag)
 
     def test_8bit_sub_half_set(self):
         res = sub_8bit(0xF, 0x1)
@@ -194,14 +194,14 @@ class Sub8BitTests(TestCase):
     def test_8bit_sub_with_carry_flags_set(self):
         res = sub_8bit(0xF, 0xE, c=1)
         self.assertEqual(res.result, 0)
-        self.assertTrue(res.c_flag)
+        self.assertFalse(res.c_flag)
         self.assertTrue(res.h_flag)
         self.assertTrue(res.z_flag)
 
     def test_8bit_sub_with_carry_flags_clear(self):
         res = sub_8bit(0xF0, 0xF0, c=1)
         self.assertEqual(res.result, 0xFF)
-        self.assertFalse(res.c_flag)
+        self.assertTrue(res.c_flag)
         self.assertFalse(res.h_flag)
         self.assertFalse(res.z_flag)
 
@@ -240,15 +240,15 @@ class Sub16BitTests(TestCase):
         self.assertEqual(res.result, 4)
         self.assertTrue(res.n_flag)
 
-    def test_16bit_sub_carry_set(self):
+    def test_16bit_sub_carry_clear(self):
         res = sub_16bit(0xF000, 0x1000)
         self.assertEqual(res.result, 0xE000)
-        self.assertTrue(res.c_flag)
+        self.assertFalse(res.c_flag)
 
-    def test_16bit_sub_carry_clear(self):
+    def test_16bit_sub_carry_set(self):
         res = sub_16bit(0xE000, 0xF000)
         self.assertEqual(res.result, 0xF000)
-        self.assertFalse(res.c_flag)
+        self.assertTrue(res.c_flag)
 
     def test_16bit_sub_half_set(self):
         res = sub_16bit(0xF00, 0x100)
