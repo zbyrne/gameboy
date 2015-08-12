@@ -1582,5 +1582,5 @@ def rotate_left_through_carry(a, c=0):
 
 def signed_8bit(a):
     if a & 0x80:
-        return -(0xFF - a)
+        return (-1 & ~ 0xFF) | a
     return a

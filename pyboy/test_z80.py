@@ -342,5 +342,5 @@ class Signed8BitTests(TestCase):
         self.assertEqual(res, 1)
 
     def test_negative(self):
-        res = signed_8bit(0xFE)
+        res = signed_8bit(0xFF)
         self.assertEqual(res, -1)
