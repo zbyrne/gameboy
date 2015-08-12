@@ -1429,7 +1429,7 @@ class Z80(object):
         self.pc += 3
 
     @op_code(0xC5, 16)
-    def pop_bc(self):
+    def push_bc(self):
         self.pc += 1
         self._push(self.bc)
 
@@ -1492,7 +1492,7 @@ class Z80(object):
         self._push(self.pc + 3)
         self.pc = addr
 
-    @op_code(0xCE, 4)
+    @op_code(0xCE, 8)
     def adc_a_d8(self):
         val = self._mem.read_byte(self.pc + 1)
         res = add_8bit(self.a, val, c=int(self.c_flag))
