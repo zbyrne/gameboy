@@ -144,6 +144,15 @@ class Z80(object):
         if "c" in flag_str:
             self.c_flag = result.c_flag
 
+    def _push(self, val):
+        self.sp -= 2
+        self._mem.write_word(val, self.sp)
+
+    def _pop(self):
+        val = self._mem.read_word(self.sp)
+        self.sp +=2
+        return val
+
     # Instructions
     # Return clock cycles used.
     # Each instruction is responsible for updating PC.
@@ -1386,8 +1395,7 @@ class Z80(object):
     @op_code(0xC0, 8, branch_cycles=20)
     def ret_nz(self):
         if not self.z_flag:
-            addr = self._mem.read_word(self.sp)
-            self.sp +=2
+            addr = self._pop()
             self.pc = addr
             return True
         self.pc +=1
@@ -1395,8 +1403,7 @@ class Z80(object):
     @op_code(0xC1, 12)
     def pop_bc(self):
         self.pc += 1
-        self.bc = self._mem.read_word(self.sp)
-        self.sp +=2
+        self.bc = self._pop()
 
     @op_code(0xC2, 12, branch_cycles=16)
     def jp_nz_a16(self):
@@ -1415,8 +1422,7 @@ class Z80(object):
     def call_nz_a16(self):
         if not self.z_flag:
             addr = self._mem.read_word(self.pc + 1)
-            self.sp -= 2
-            self._mem.write_word(self.pc + 3, self.sp)
+            self._push(self.pc + 3)
             self.pc = addr
             return True
         self.pc += 3

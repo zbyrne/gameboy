@@ -95,6 +95,24 @@ class Z80Tests(TestCase):
         self.assertEqual(z.sp, 10)
         self.assertEqual(z.pc, 0xAA55)
 
+    def test_push(self):
+        m = MockMem()
+        z = Z80(m)
+        z.sp = 8
+        z._push(0xAA55)
+        self.assertEqual(z.sp, 6)
+        self.assertEqual(m.read_word(6), 0xAA55)
+
+    def test_pop(self):
+        m = MockMem()
+        m[8] = 0x55
+        m[9] = 0xAA
+        z = Z80(m)
+        z.sp = 8
+        val = z._pop()
+        self.assertEqual(val, 0xAA55)
+        self.assertEqual(z.sp, 0xA)
+
 
 class Add8BitTests(TestCase):
     def test_8bit_add(self):
