@@ -2144,6 +2144,262 @@ class Z80(object):
         self.set_flags("znhc", res)
         self.a = res.result
 
+    @extra_op(0x40)
+    def bit_0_b(self):
+        self.set_flags("znh", bit(self.b, 0))
+
+    @extra_op(0x41)
+    def bit_0_c(self):
+        self.set_flags("znh", bit(self.c, 0))
+
+    @extra_op(0x42)
+    def bit_0_d(self):
+        self.set_flags("znh", bit(self.d, 0))
+
+    @extra_op(0x43)
+    def bit_0_e(self):
+        self.set_flags("znh", bit(self.e, 0))
+
+    @extra_op(0x44)
+    def bit_0_h(self):
+        self.set_flags("znh", bit(self.h, 0))
+
+    @extra_op(0x45)
+    def bit_0_l(self):
+        self.set_flags("znh", bit(self.l, 0))
+
+    @extra_op(0x46)
+    def bit_0_addr_hl(self):
+        self.set_flags("znh", bit(self._mem.read_byte(self.hl), 0))
+
+    @extra_op(0x47)
+    def bit_0_a(self):
+        self.set_flags("znh", bit(self.a, 0))
+
+    @extra_op(0x48)
+    def bit_1_b(self):
+        self.set_flags("znh", bit(self.b, 1))
+
+    @extra_op(0x49)
+    def bit_1_c(self):
+        self.set_flags("znh", bit(self.c, 1))
+
+    @extra_op(0x4A)
+    def bit_1_d(self):
+        self.set_flags("znh", bit(self.d, 1))
+
+    @extra_op(0x4B)
+    def bit_1_e(self):
+        self.set_flags("znh", bit(self.e, 1))
+
+    @extra_op(0x4C)
+    def bit_1_h(self):
+        self.set_flags("znh", bit(self.h, 1))
+
+    @extra_op(0x4D)
+    def bit_1_l(self):
+        self.set_flags("znh", bit(self.l, 1))
+
+    @extra_op(0x4E)
+    def bit_1_addr_hl(self):
+        self.set_flags("znh", bit(self._mem.read_byte(self.hl), 1))
+
+    @extra_op(0x4F)
+    def bit_1_a(self):
+        self.set_flags("znh", bit(self.a, 1))
+
+    @extra_op(0x50)
+    def bit_2_b(self):
+        self.set_flags("znh", bit(self.b, 2))
+
+    @extra_op(0x51)
+    def bit_2_c(self):
+        self.set_flags("znh", bit(self.c, 2))
+
+    @extra_op(0x52)
+    def bit_2_d(self):
+        self.set_flags("znh", bit(self.d, 2))
+
+    @extra_op(0x53)
+    def bit_2_e(self):
+        self.set_flags("znh", bit(self.e, 2))
+
+    @extra_op(0x54)
+    def bit_2_h(self):
+        self.set_flags("znh", bit(self.h, 2))
+
+    @extra_op(0x55)
+    def bit_2_l(self):
+        self.set_flags("znh", bit(self.l, 2))
+
+    @extra_op(0x56)
+    def bit_2_addr_hl(self):
+        self.set_flags("znh", bit(self._mem.read_byte(self.hl), 2))
+
+    @extra_op(0x57)
+    def bit_2_a(self):
+        self.set_flags("znh", bit(self.a, 2))
+
+    @extra_op(0x58)
+    def bit_3_b(self):
+        self.set_flags("znh", bit(self.b, 3))
+
+    @extra_op(0x59)
+    def bit_3_c(self):
+        self.set_flags("znh", bit(self.c, 3))
+
+    @extra_op(0x5A)
+    def bit_3_d(self):
+        self.set_flags("znh", bit(self.d, 3))
+
+    @extra_op(0x5B)
+    def bit_3_e(self):
+        self.set_flags("znh", bit(self.e, 3))
+
+    @extra_op(0x5C)
+    def bit_3_h(self):
+        self.set_flags("znh", bit(self.h, 3))
+
+    @extra_op(0x5D)
+    def bit_3_l(self):
+        self.set_flags("znh", bit(self.l, 3))
+
+    @extra_op(0x5E)
+    def bit_3_addr_hl(self):
+        self.set_flags("znh", bit(self._mem.read_byte(self.hl), 3))
+
+    @extra_op(0x5F)
+    def bit_3_a(self):
+        self.set_flags("znh", bit(self.a, 3))
+
+    @extra_op(0x60)
+    def bit_4_b(self):
+        self.set_flags("znh", bit(self.b, 4))
+
+    @extra_op(0x61)
+    def bit_4_c(self):
+        self.set_flags("znh", bit(self.c, 4))
+
+    @extra_op(0x64)
+    def bit_4_d(self):
+        self.set_flags("znh", bit(self.d, 4))
+
+    @extra_op(0x63)
+    def bit_4_e(self):
+        self.set_flags("znh", bit(self.e, 4))
+
+    @extra_op(0x64)
+    def bit_4_h(self):
+        self.set_flags("znh", bit(self.h, 4))
+
+    @extra_op(0x65)
+    def bit_4_l(self):
+        self.set_flags("znh", bit(self.l, 4))
+
+    @extra_op(0x66)
+    def bit_4_addr_hl(self):
+        self.set_flags("znh", bit(self._mem.read_byte(self.hl), 4))
+
+    @extra_op(0x67)
+    def bit_4_a(self):
+        self.set_flags("znh", bit(self.a, 4))
+
+    @extra_op(0x68)
+    def bit_5_b(self):
+        self.set_flags("znh", bit(self.b, 5))
+
+    @extra_op(0x69)
+    def bit_5_c(self):
+        self.set_flags("znh", bit(self.c, 5))
+
+    @extra_op(0x6A)
+    def bit_5_d(self):
+        self.set_flags("znh", bit(self.d, 5))
+
+    @extra_op(0x6B)
+    def bit_5_e(self):
+        self.set_flags("znh", bit(self.e, 5))
+
+    @extra_op(0x6C)
+    def bit_5_h(self):
+        self.set_flags("znh", bit(self.h, 5))
+
+    @extra_op(0x6D)
+    def bit_5_l(self):
+        self.set_flags("znh", bit(self.l, 5))
+
+    @extra_op(0x6E)
+    def bit_5_addr_hl(self):
+        self.set_flags("znh", bit(self._mem.read_byte(self.hl), 5))
+
+    @extra_op(0x6F)
+    def bit_5_a(self):
+        self.set_flags("znh", bit(self.a, 5))
+
+    @extra_op(0x70)
+    def bit_6_b(self):
+        self.set_flags("znh", bit(self.b, 6))
+
+    @extra_op(0x71)
+    def bit_6_c(self):
+        self.set_flags("znh", bit(self.c, 6))
+
+    @extra_op(0x76)
+    def bit_6_d(self):
+        self.set_flags("znh", bit(self.d, 6))
+
+    @extra_op(0x73)
+    def bit_6_e(self):
+        self.set_flags("znh", bit(self.e, 6))
+
+    @extra_op(0x76)
+    def bit_6_h(self):
+        self.set_flags("znh", bit(self.h, 6))
+
+    @extra_op(0x75)
+    def bit_6_l(self):
+        self.set_flags("znh", bit(self.l, 6))
+
+    @extra_op(0x76)
+    def bit_6_addr_hl(self):
+        self.set_flags("znh", bit(self._mem.read_byte(self.hl), 6))
+
+    @extra_op(0x77)
+    def bit_6_a(self):
+        self.set_flags("znh", bit(self.a, 6))
+
+    @extra_op(0x78)
+    def bit_7_b(self):
+        self.set_flags("znh", bit(self.b, 7))
+
+    @extra_op(0x79)
+    def bit_7_c(self):
+        self.set_flags("znh", bit(self.c, 7))
+
+    @extra_op(0x7A)
+    def bit_7_d(self):
+        self.set_flags("znh", bit(self.d, 7))
+
+    @extra_op(0x7B)
+    def bit_7_e(self):
+        self.set_flags("znh", bit(self.e, 7))
+
+    @extra_op(0x7C)
+    def bit_7_h(self):
+        self.set_flags("znh", bit(self.h, 7))
+
+    @extra_op(0x7D)
+    def bit_7_l(self):
+        self.set_flags("znh", bit(self.l, 7))
+
+    @extra_op(0x7E)
+    def bit_7_addr_hl(self):
+        self.set_flags("znh", bit(self._mem.read_byte(self.hl), 7))
+
+    @extra_op(0x7F)
+    def bit_7_a(self):
+        self.set_flags("znh", bit(self.a, 7))
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
