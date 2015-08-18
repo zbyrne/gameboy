@@ -1952,6 +1952,198 @@ class Z80(object):
         self.set_flags("znhc", res)
         self.a = res.result
 
+    @extra_op(0x20)
+    def sla_b(self):
+        res = shift_left(self.b)
+        self.set_flags("znhc", res)
+        self.b = res.result
+
+    @extra_op(0x21)
+    def sla_c(self):
+        res = shift_left(self.c)
+        self.set_flags("znhc", res)
+        self.c = res.result
+
+    @extra_op(0x22)
+    def sla_d(self):
+        res = shift_left(self.d)
+        self.set_flags("znhc", res)
+        self.d = res.result
+
+    @extra_op(0x23)
+    def sla_e(self):
+        res = shift_left(self.e)
+        self.set_flags("znhc", res)
+        self.e = res.result
+
+    @extra_op(0x24)
+    def sla_h(self):
+        res = shift_left(self.h)
+        self.set_flags("znhc", res)
+        self.h = res.result
+
+    @extra_op(0x25)
+    def sla_l(self):
+        res = shift_left(self.l)
+        self.set_flags("znhc", res)
+        self.l = res.result
+
+    @extra_op(0x26)
+    def sla_addr_hl(self):
+        res = shift_left(self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x27)
+    def sla_a(self):
+        res = shift_left(self.a)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @extra_op(0x28)
+    def sra_b(self):
+        res = shift_right_arithmetic(self.b)
+        self.set_flags("znhc", res)
+        self.b = res.result
+
+    @extra_op(0x29)
+    def sra_c(self):
+        res = shift_right_arithmetic(self.c)
+        self.set_flags("znhc", res)
+        self.c = res.result
+
+    @extra_op(0x2A)
+    def sra_d(self):
+        res = shift_right_arithmetic(self.d)
+        self.set_flags("znhc", res)
+        self.d = res.result
+
+    @extra_op(0x2B)
+    def sra_e(self):
+        res = shift_right_arithmetic(self.e)
+        self.set_flags("znhc", res)
+        self.e = res.result
+
+    @extra_op(0x2C)
+    def sra_h(self):
+        res = shift_right_arithmetic(self.h)
+        self.set_flags("znhc", res)
+        self.h = res.result
+
+    @extra_op(0x2D)
+    def sra_l(self):
+        res = shift_right_arithmetic(self.l)
+        self.set_flags("znhc", res)
+        self.l = res.result
+
+    @extra_op(0x2E)
+    def sra_addr_hl(self):
+        res = shift_right_arithmetic(self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x2F)
+    def sra_a(self):
+        res = shift_right_arithmetic(self.a)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @extra_op(0x30)
+    def swap_b(self):
+        res = swap(self.b)
+        self.set_flags("znhc", res)
+        self.b = res.result
+
+    @extra_op(0x31)
+    def swap_c(self):
+        res = swap(self.c)
+        self.set_flags("znhc", res)
+        self.c = res.result
+
+    @extra_op(0x32)
+    def swap_d(self):
+        res = swap(self.d)
+        self.set_flags("znhc", res)
+        self.d = res.result
+
+    @extra_op(0x33)
+    def swap_e(self):
+        res = swap(self.e)
+        self.set_flags("znhc", res)
+        self.e = res.result
+
+    @extra_op(0x34)
+    def swap_h(self):
+        res = swap(self.h)
+        self.set_flags("znhc", res)
+        self.h = res.result
+
+    @extra_op(0x35)
+    def swap_l(self):
+        res = swap(self.l)
+        self.set_flags("znhc", res)
+        self.l = res.result
+
+    @extra_op(0x36)
+    def swap_addr_hl(self):
+        res = swap(self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x37)
+    def swap_a(self):
+        res = swap(self.a)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @extra_op(0x38)
+    def srl_b(self):
+        res = shift_right_logical(self.b)
+        self.set_flags("znhc", res)
+        self.b = res.result
+
+    @extra_op(0x39)
+    def srl_c(self):
+        res = shift_right_logical(self.c)
+        self.set_flags("znhc", res)
+        self.c = res.result
+
+    @extra_op(0x3A)
+    def srl_d(self):
+        res = shift_right_logical(self.d)
+        self.set_flags("znhc", res)
+        self.d = res.result
+
+    @extra_op(0x3B)
+    def srl_e(self):
+        res = shift_right_logical(self.e)
+        self.set_flags("znhc", res)
+        self.e = res.result
+
+    @extra_op(0x3C)
+    def srl_h(self):
+        res = shift_right_logical(self.h)
+        self.set_flags("znhc", res)
+        self.h = res.result
+
+    @extra_op(0x3D)
+    def srl_l(self):
+        res = shift_right_logical(self.l)
+        self.set_flags("znhc", res)
+        self.l = res.result
+
+    @extra_op(0x3E)
+    def srl_addr_hl(self):
+        res = shift_right_logical(self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x3F)
+    def srl_a(self):
+        res = shift_right_logical(self.a)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
