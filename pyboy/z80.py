@@ -25,6 +25,16 @@ def op_code(code, cycles, branch_cycles=0):
     return dec
 
 
+def extra_op(code):
+    """
+    The instruction 0xCB calls a table of 256 extra instructions.
+    """
+    def dec(fn):
+        setattr(fn, "extra_op", code)
+        return fn
+    return dec
+
+
 class Z80(object):
 
     def __init__(self, mem):
@@ -40,11 +50,13 @@ class Z80(object):
         self.sp = 0
         self.pc = 0
         self.op_map = {}
+        self.extra_ops_map = {}
         for attr in dir(self):
             attr = getattr(self, attr)
             if hasattr(attr, "op_code"):
                 self.op_map[attr.op_code] = attr
-        self.extra_ops_map = {}
+            if hasattr(attr, "extra_op"):
+                self.extra_ops_map[attr.extra_op] = attr
 
     def dispatch(self):
         instruction = self._mem.read_byte(self.pc)
@@ -1743,6 +1755,202 @@ class Z80(object):
     def rst_0x38(self):
         self._push(self.pc)
         self.pc = 0x38
+
+    # Extra instructions
+    # The 0xCB instruction took care of the PC and the clock
+    # Just update registers/memory
+
+    @extra_op(0x00)
+    def rlc_b(self):
+        res = rotate_left(self.b)
+        self.set_flags("znhc", res)
+        self.b = res.result
+
+    @extra_op(0x01)
+    def rlc_c(self):
+        res = rotate_left(self.c)
+        self.set_flags("znhc", res)
+        self.c = res.result
+
+    @extra_op(0x02)
+    def rlc_d(self):
+        res = rotate_left(self.d)
+        self.set_flags("znhc", res)
+        self.d = res.result
+
+    @extra_op(0x03)
+    def rlc_e(self):
+        res = rotate_left(self.e)
+        self.set_flags("znhc", res)
+        self.e = res.result
+
+    @extra_op(0x04)
+    def rlc_h(self):
+        res = rotate_left(self.h)
+        self.set_flags("znhc", res)
+        self.h = res.result
+
+    @extra_op(0x05)
+    def rlc_l(self):
+        res = rotate_left(self.l)
+        self.set_flags("znhc", res)
+        self.l = res.result
+
+    @extra_op(0x06)
+    def rlc_addr_hl(self):
+        res = rotate_left(self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x07)
+    def rlc_a(self):
+        res = rotate_left(self.a)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @extra_op(0x08)
+    def rrc_b(self):
+        res = rotate_right(self.b)
+        self.set_flags("znhc", res)
+        self.b = res.result
+
+    @extra_op(0x09)
+    def rrc_c(self):
+        res = rotate_right(self.c)
+        self.set_flags("znhc", res)
+        self.c = res.result
+
+    @extra_op(0x0A)
+    def rrc_d(self):
+        res = rotate_right(self.d)
+        self.set_flags("znhc", res)
+        self.d = res.result
+
+    @extra_op(0x0B)
+    def rrc_e(self):
+        res = rotate_right(self.e)
+        self.set_flags("znhc", res)
+        self.e = res.result
+
+    @extra_op(0x0C)
+    def rrc_h(self):
+        res = rotate_right(self.h)
+        self.set_flags("znhc", res)
+        self.h = res.result
+
+    @extra_op(0x0D)
+    def rrc_l(self):
+        res = rotate_right(self.l)
+        self.set_flags("znhc", res)
+        self.l = res.result
+
+    @extra_op(0x0E)
+    def rrc_addr_hl(self):
+        res = rotate_right(self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x0F)
+    def rrc_a(self):
+        res = rotate_right(self.a)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @extra_op(0x10)
+    def rl_b(self):
+        res = rotate_left_through_carry(self.b)
+        self.set_flags("znhc", res)
+        self.b = res.result
+
+    @extra_op(0x11)
+    def rl_c(self):
+        res = rotate_left_through_carry(self.c)
+        self.set_flags("znhc", res)
+        self.c = res.result
+
+    @extra_op(0x12)
+    def rl_d(self):
+        res = rotate_left_through_carry(self.d)
+        self.set_flags("znhc", res)
+        self.d = res.result
+
+    @extra_op(0x13)
+    def rl_e(self):
+        res = rotate_left_through_carry(self.e)
+        self.set_flags("znhc", res)
+        self.e = res.result
+
+    @extra_op(0x14)
+    def rl_h(self):
+        res = rotate_left_through_carry(self.h)
+        self.set_flags("znhc", res)
+        self.h = res.result
+
+    @extra_op(0x15)
+    def rl_l(self):
+        res = rotate_left_through_carry(self.l)
+        self.set_flags("znhc", res)
+        self.l = res.result
+
+    @extra_op(0x16)
+    def rl_addr_hl(self):
+        res = rotate_left_through_carry(self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x17)
+    def rl_a(self):
+        res = rotate_left_through_carry(self.a)
+        self.set_flags("znhc", res)
+        self.a = res.result
+
+    @extra_op(0x18)
+    def rr_b(self):
+        res = rotate_right_through_carry(self.b)
+        self.set_flags("znhc", res)
+        self.b = res.result
+
+    @extra_op(0x19)
+    def rr_c(self):
+        res = rotate_right_through_carry(self.c)
+        self.set_flags("znhc", res)
+        self.c = res.result
+
+    @extra_op(0x1A)
+    def rr_d(self):
+        res = rotate_right_through_carry(self.d)
+        self.set_flags("znhc", res)
+        self.d = res.result
+
+    @extra_op(0x1B)
+    def rr_e(self):
+        res = rotate_right_through_carry(self.e)
+        self.set_flags("znhc", res)
+        self.e = res.result
+
+    @extra_op(0x1C)
+    def rr_h(self):
+        res = rotate_right_through_carry(self.h)
+        self.set_flags("znhc", res)
+        self.h = res.result
+
+    @extra_op(0x1D)
+    def rr_l(self):
+        res = rotate_right_through_carry(self.l)
+        self.set_flags("znhc", res)
+        self.l = res.result
+
+    @extra_op(0x1E)
+    def rr_addr_hl(self):
+        res = rotate_right_through_carry(self._mem.read_byte(self.hl))
+        self.set_flags("znhc", res)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x1F)
+    def rr_a(self):
+        res = rotate_right_through_carry(self.a)
+        self.set_flags("znhc", res)
+        self.a = res.result
 
 
 ALUResult = namedtuple("ALUResult",
