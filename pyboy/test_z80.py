@@ -5,6 +5,10 @@ from z80 import rotate_right, rotate_right_through_carry
 from z80 import rotate_left, rotate_left_through_carry
 from z80 import ALUResult
 from z80 import signed_8bit
+from z80 import shift_left, shift_right_arithmetic, shift_right_logical
+from z80 import swap
+from z80 import bit, set_bit, reset_bit
+
 
 class MockMem(dict):
     """
@@ -344,3 +348,60 @@ class Signed8BitTests(TestCase):
     def test_negative(self):
         res = signed_8bit(0xFF)
         self.assertEqual(res, -1)
+
+
+class ShiftLeftTests(TestCase):
+    def test_shift_left(self):
+        res = shift_left(0x8)
+        self.assertEqual(res.result, 0x10)
+        self.assertFalse(res.n_flag)
+        self.assertFalse(res.h_flag)
+
+    def test_shift_left_zero(self):
+        res = shift_left(0)
+        self.assertEqual(res.result, 0)
+        self.assertTrue(res.z_flag)
+
+    def test_shift_left_carry(self):
+        res = shift_left(0x80)
+        self.assertEqual(res.result, 0)
+        self.assertTrue(res.z_flag)
+        self.assertTrue(res.c_flag)
+
+
+class ShiftRightTests(TestCase):
+    def test_shift_right_arithmetic(self):
+        res = shift_right_arithmetic(0x81)
+        self.assertEqual(res.result, 0xC0)
+        self.assertTrue(res.c_flag)
+
+    def test_shift_right_logical(self):
+        res = shift_right_logical(0x81)
+        self.assertEqual(res.result, 0x40)
+        self.assertTrue(res.c_flag)
+
+
+class SwapTests(TestCase):
+    def test_swap(self):
+        res = swap(0xA5)
+        self.assertEqual(res.result, 0x5A)
+
+
+class BitTests(TestCase):
+    def test_bit(self):
+        res = bit(0x5, 2)
+        self.assertFalse(res.z_flag)
+        res = bit(0x5, 3)
+        self.assertTrue(res.z_flag)
+
+    def test_reset_bit(self):
+        res = reset_bit(0x5, 2)
+        self.assertEqual(res.result, 0x1)
+        res = reset_bit(0x5, 3)
+        self.assertEqual(res.result, 0x5)
+
+    def test_set_bit(self):
+        res = set_bit(0x5, 2)
+        self.assertEqual(res.result, 0x5)
+        res = set_bit(0x5, 3)
+        self.assertEqual(res.result, 0xD)

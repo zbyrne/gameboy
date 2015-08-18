@@ -1824,3 +1824,67 @@ def signed_8bit(a):
     if a & 0x80:
         return (-1 & ~ 0xFF) | a
     return a
+
+
+def shift_left(a):
+    val = (a << 1) & 0xFF
+    c_flag = bool(a & 0x80)
+    n_flag = False
+    h_flag = False
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def shift_right_arithmetic(a):
+    val = (a >> 1) & 0xFF
+    if a & 0x80:
+        val |= 0x80
+    c_flag = bool(a & 0x1)
+    n_flag = False
+    h_flag = False
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def shift_right_logical(a):
+    val = (a >> 1) & 0xFF
+    c_flag = bool(a & 0x1)
+    n_flag = False
+    h_flag = False
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def swap(a):
+    val = ((a & 0xF0) >> 4) | ((a & 0xF) << 4)
+    c_flag = False
+    n_flag = False
+    h_flag = False
+    z_flag = val == 0
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def bit(a, b):
+    c_flag = False
+    n_flag = False
+    h_flag = True
+    z_flag = not (a & (1 << b))
+    return ALUResult(None, z_flag, n_flag, h_flag, c_flag)
+
+
+def reset_bit(a, b):
+    val = (a & ~(1 << b)) & 0xFF
+    c_flag = False
+    n_flag = False
+    h_flag = False
+    z_flag = False
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
+
+
+def set_bit(a, b):
+    val = (a | (1 << b)) & 0xFF
+    c_flag = False
+    n_flag = False
+    h_flag = False
+    z_flag = False
+    return ALUResult(val, z_flag, n_flag, h_flag, c_flag)
