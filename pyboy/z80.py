@@ -155,7 +155,6 @@ class Z80(object):
         return val
 
     # Instructions
-    # Return clock cycles used.
     # Each instruction is responsible for updating PC.
     # This is to make branching simpler.
 
@@ -1641,8 +1640,8 @@ class Z80(object):
         self.set_flags("hc", res)
         self.z_flag = False
         self.n_flag = False
-        self.pc = res.result
-        self.ps += 2
+        self.sp = res.result
+        self.pc += 2
 
     @op_code(0xE9, 4)
     def jp_addr_hl(self):
@@ -1736,7 +1735,7 @@ class Z80(object):
     @op_code(0xFE, 8)
     def cp_d8(self):
         val = self._mem.read_byte(self.pc + 1)
-        res = sub_8bit(self.a, self.a)
+        res = sub_8bit(self.a, val)
         self.set_flags("znhc", res)
         self.pc += 2
 
