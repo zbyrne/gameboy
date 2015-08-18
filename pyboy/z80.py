@@ -1661,7 +1661,7 @@ class Z80(object):
         self.pc = addr
 
     @op_code(0xEA, 16)
-    def ldh_a8_a(self):
+    def ldh_a16_a(self):
         addr = self._mem.read_word(self.pc + 1)
         self._mem.write_byte(self.a, addr)
         self.pc += 3
@@ -1734,7 +1734,7 @@ class Z80(object):
         self.pc += 1
 
     @op_code(0xFA, 16)
-    def ldh_a_a8(self):
+    def ldh_a_a16(self):
         addr = self._mem.read_word(self.pc + 1)
         self.a = self._mem.read_byte(addr)
         self.pc += 3
