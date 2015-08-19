@@ -2400,6 +2400,534 @@ class Z80(object):
     def bit_7_a(self):
         self.set_flags("znh", bit(self.a, 7))
 
+    @extra_op(0x80)
+    def res_0_b(self):
+        self.b = reset_bit(self.b, 0).result
+
+    @extra_op(0x81)
+    def res_0_c(self):
+        self.c = reset_bit(self.c, 0).result
+
+    @extra_op(0x82)
+    def res_0_d(self):
+        self.d = reset_bit(self.d, 0).result
+
+    @extra_op(0x83)
+    def res_0_e(self):
+        self.e = reset_bit(self.e, 0).result
+
+    @extra_op(0x84)
+    def res_0_h(self):
+        self.h = reset_bit(self.h, 0).result
+
+    @extra_op(0x85)
+    def res_0_l(self):
+        self.l = reset_bit(self.l, 0).result
+
+    @extra_op(0x86)
+    def res_0_addr_hl(self):
+        res = reset_bit(self._mem.read_byte(self.hl), 0)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x87)
+    def res_0_a(self):
+        self.a = reset_bit(self.a, 0).result
+
+    @extra_op(0x88)
+    def res_1_b(self):
+        self.b = reset_bit(self.b, 1).result
+
+    @extra_op(0x89)
+    def res_1_c(self):
+        self.c = reset_bit(self.c, 1).result
+
+    @extra_op(0x8A)
+    def res_1_d(self):
+        self.d = reset_bit(self.d, 1).result
+
+    @extra_op(0x8B)
+    def res_1_e(self):
+        self.e = reset_bit(self.e, 1).result
+
+    @extra_op(0x8C)
+    def res_1_h(self):
+        self.h = reset_bit(self.h, 1).result
+
+    @extra_op(0x8D)
+    def res_1_l(self):
+        self.l = reset_bit(self.l, 1).result
+
+    @extra_op(0x8E)
+    def res_1_addr_hl(self):
+        res = reset_bit(self._mem.read_byte(self.hl), 1)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x8F)
+    def res_1_a(self):
+        self.a = reset_bit(self.a, 1).result
+
+    @extra_op(0x90)
+    def res_2_b(self):
+        self.b = reset_bit(self.b, 2).result
+
+    @extra_op(0x91)
+    def res_2_c(self):
+        self.c = reset_bit(self.c, 2).result
+
+    @extra_op(0x92)
+    def res_2_d(self):
+        self.d = reset_bit(self.d, 2).result
+
+    @extra_op(0x93)
+    def res_2_e(self):
+        self.e = reset_bit(self.e, 2).result
+
+    @extra_op(0x94)
+    def res_2_h(self):
+        self.h = reset_bit(self.h, 2).result
+
+    @extra_op(0x95)
+    def res_2_l(self):
+        self.l = reset_bit(self.l, 2).result
+
+    @extra_op(0x96)
+    def res_2_addr_hl(self):
+        res = reset_bit(self._mem.read_byte(self.hl), 2)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x97)
+    def res_2_a(self):
+        self.a = reset_bit(self.a, 2).result
+
+    @extra_op(0x98)
+    def res_3_b(self):
+        self.b = reset_bit(self.b, 3).result
+
+    @extra_op(0x99)
+    def res_3_c(self):
+        self.c = reset_bit(self.c, 3).result
+
+    @extra_op(0x9A)
+    def res_3_d(self):
+        self.d = reset_bit(self.d, 3).result
+
+    @extra_op(0x9B)
+    def res_3_e(self):
+        self.e = reset_bit(self.e, 3).result
+
+    @extra_op(0x9C)
+    def res_3_h(self):
+        self.h = reset_bit(self.h, 3).result
+
+    @extra_op(0x9D)
+    def res_3_l(self):
+        self.l = reset_bit(self.l, 3).result
+
+    @extra_op(0x9E)
+    def res_3_addr_hl(self):
+        res = reset_bit(self._mem.read_byte(self.hl), 3)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0x9F)
+    def res_3_a(self):
+        self.a = reset_bit(self.a, 3).result
+
+    @extra_op(0xA0)
+    def res_4_b(self):
+        self.b = reset_bit(self.b, 4).result
+
+    @extra_op(0xA1)
+    def res_4_c(self):
+        self.c = reset_bit(self.c, 4).result
+
+    @extra_op(0xA2)
+    def res_4_d(self):
+        self.d = reset_bit(self.d, 4).result
+
+    @extra_op(0xA3)
+    def res_4_e(self):
+        self.e = reset_bit(self.e, 4).result
+
+    @extra_op(0xA4)
+    def res_4_h(self):
+        self.h = reset_bit(self.h, 4).result
+
+    @extra_op(0xA5)
+    def res_4_l(self):
+        self.l = reset_bit(self.l, 4).result
+
+    @extra_op(0xA6)
+    def res_4_addr_hl(self):
+        res = reset_bit(self._mem.read_byte(self.hl), 4)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xA7)
+    def res_4_a(self):
+        self.a = reset_bit(self.a, 4).result
+
+    @extra_op(0xA8)
+    def res_5_b(self):
+        self.b = reset_bit(self.b, 5).result
+
+    @extra_op(0xA9)
+    def res_5_c(self):
+        self.c = reset_bit(self.c, 5).result
+
+    @extra_op(0xAA)
+    def res_5_d(self):
+        self.d = reset_bit(self.d, 5).result
+
+    @extra_op(0xAB)
+    def res_5_e(self):
+        self.e = reset_bit(self.e, 5).result
+
+    @extra_op(0xAC)
+    def res_5_h(self):
+        self.h = reset_bit(self.h, 5).result
+
+    @extra_op(0xAD)
+    def res_5_l(self):
+        self.l = reset_bit(self.l, 5).result
+
+    @extra_op(0xAE)
+    def res_5_addr_hl(self):
+        res = reset_bit(self._mem.read_byte(self.hl), 5)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xAF)
+    def res_5_a(self):
+        self.a = reset_bit(self.a, 5).result
+
+    @extra_op(0xB0)
+    def res_6_b(self):
+        self.b = reset_bit(self.b, 6).result
+
+    @extra_op(0xB1)
+    def res_6_c(self):
+        self.c = reset_bit(self.c, 6).result
+
+    @extra_op(0xB2)
+    def res_6_d(self):
+        self.d = reset_bit(self.d, 6).result
+
+    @extra_op(0xB3)
+    def res_6_e(self):
+        self.e = reset_bit(self.e, 6).result
+
+    @extra_op(0xB4)
+    def res_6_h(self):
+        self.h = reset_bit(self.h, 6).result
+
+    @extra_op(0xB5)
+    def res_6_l(self):
+        self.l = reset_bit(self.l, 6).result
+
+    @extra_op(0xB6)
+    def res_6_addr_hl(self):
+        res = reset_bit(self._mem.read_byte(self.hl), 6)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xB7)
+    def res_6_a(self):
+        self.a = reset_bit(self.a, 6).result
+
+    @extra_op(0xB8)
+    def res_7_b(self):
+        self.b = reset_bit(self.b, 7).result
+
+    @extra_op(0xB9)
+    def res_7_c(self):
+        self.c = reset_bit(self.c, 7).result
+
+    @extra_op(0xBA)
+    def res_7_d(self):
+        self.d = reset_bit(self.d, 7).result
+
+    @extra_op(0xBB)
+    def res_7_e(self):
+        self.e = reset_bit(self.e, 7).result
+
+    @extra_op(0xBC)
+    def res_7_h(self):
+        self.h = reset_bit(self.h, 7).result
+
+    @extra_op(0xBD)
+    def res_7_l(self):
+        self.l = reset_bit(self.l, 7).result
+
+    @extra_op(0xBE)
+    def res_7_addr_hl(self):
+        res = reset_bit(self._mem.read_byte(self.hl), 7)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xBF)
+    def res_7_a(self):
+        self.a = reset_bit(self.a, 7).result
+
+    @extra_op(0xC0)
+    def set_0_b(self):
+        self.b = set_bit(self.b, 0).result
+
+    @extra_op(0xC1)
+    def set_0_c(self):
+        self.c = set_bit(self.c, 0).result
+
+    @extra_op(0xC2)
+    def set_0_d(self):
+        self.d = set_bit(self.d, 0).result
+
+    @extra_op(0xC3)
+    def set_0_e(self):
+        self.e = set_bit(self.e, 0).result
+
+    @extra_op(0xC4)
+    def set_0_h(self):
+        self.h = set_bit(self.h, 0).result
+
+    @extra_op(0xC5)
+    def set_0_l(self):
+        self.l = set_bit(self.l, 0).result
+
+    @extra_op(0xC6)
+    def set_0_addr_hl(self):
+        res = set_bit(self._mem.read_byte(self.hl), 0)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xC7)
+    def set_0_a(self):
+        self.a = set_bit(self.a, 0).result
+
+    @extra_op(0xC8)
+    def set_1_b(self):
+        self.b = set_bit(self.b, 1).result
+
+    @extra_op(0xC9)
+    def set_1_c(self):
+        self.c = set_bit(self.c, 1).result
+
+    @extra_op(0xCA)
+    def set_1_d(self):
+        self.d = set_bit(self.d, 1).result
+
+    @extra_op(0xCB)
+    def set_1_e(self):
+        self.e = set_bit(self.e, 1).result
+
+    @extra_op(0xCC)
+    def set_1_h(self):
+        self.h = set_bit(self.h, 1).result
+
+    @extra_op(0xCD)
+    def set_1_l(self):
+        self.l = set_bit(self.l, 1).result
+
+    @extra_op(0xCE)
+    def set_1_addr_hl(self):
+        res = set_bit(self._mem.read_byte(self.hl), 1)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xCF)
+    def set_1_a(self):
+        self.a = set_bit(self.a, 1).result
+
+    @extra_op(0xD0)
+    def set_2_b(self):
+        self.b = set_bit(self.b, 2).result
+
+    @extra_op(0xD1)
+    def set_2_c(self):
+        self.c = set_bit(self.c, 2).result
+
+    @extra_op(0xD2)
+    def set_2_d(self):
+        self.d = set_bit(self.d, 2).result
+
+    @extra_op(0xD3)
+    def set_2_e(self):
+        self.e = set_bit(self.e, 2).result
+
+    @extra_op(0xD4)
+    def set_2_h(self):
+        self.h = set_bit(self.h, 2).result
+
+    @extra_op(0xD5)
+    def set_2_l(self):
+        self.l = set_bit(self.l, 2).result
+
+    @extra_op(0xD6)
+    def set_2_addr_hl(self):
+        res = set_bit(self._mem.read_byte(self.hl), 2)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xD7)
+    def set_2_a(self):
+        self.a = set_bit(self.a, 2).result
+
+    @extra_op(0xD8)
+    def set_3_b(self):
+        self.b = set_bit(self.b, 3).result
+
+    @extra_op(0xD9)
+    def set_3_c(self):
+        self.c = set_bit(self.c, 3).result
+
+    @extra_op(0xDA)
+    def set_3_d(self):
+        self.d = set_bit(self.d, 3).result
+
+    @extra_op(0xDB)
+    def set_3_e(self):
+        self.e = set_bit(self.e, 3).result
+
+    @extra_op(0xDC)
+    def set_3_h(self):
+        self.h = set_bit(self.h, 3).result
+
+    @extra_op(0xDD)
+    def set_3_l(self):
+        self.l = set_bit(self.l, 3).result
+
+    @extra_op(0xDE)
+    def set_3_addr_hl(self):
+        res = set_bit(self._mem.read_byte(self.hl), 3)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xDF)
+    def set_3_a(self):
+        self.a = set_bit(self.a, 3).result
+
+    @extra_op(0xE0)
+    def set_4_b(self):
+        self.b = set_bit(self.b, 4).result
+
+    @extra_op(0xE1)
+    def set_4_c(self):
+        self.c = set_bit(self.c, 4).result
+
+    @extra_op(0xE2)
+    def set_4_d(self):
+        self.d = set_bit(self.d, 4).result
+
+    @extra_op(0xE3)
+    def set_4_e(self):
+        self.e = set_bit(self.e, 4).result
+
+    @extra_op(0xE4)
+    def set_4_h(self):
+        self.h = set_bit(self.h, 4).result
+
+    @extra_op(0xE5)
+    def set_4_l(self):
+        self.l = set_bit(self.l, 4).result
+
+    @extra_op(0xE6)
+    def set_4_addr_hl(self):
+        res = set_bit(self._mem.read_byte(self.hl), 4)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xE7)
+    def set_4_a(self):
+        self.a = set_bit(self.a, 4).result
+
+    @extra_op(0xE8)
+    def set_5_b(self):
+        self.b = set_bit(self.b, 5).result
+
+    @extra_op(0xE9)
+    def set_5_c(self):
+        self.c = set_bit(self.c, 5).result
+
+    @extra_op(0xEA)
+    def set_5_d(self):
+        self.d = set_bit(self.d, 5).result
+
+    @extra_op(0xEB)
+    def set_5_e(self):
+        self.e = set_bit(self.e, 5).result
+
+    @extra_op(0xEC)
+    def set_5_h(self):
+        self.h = set_bit(self.h, 5).result
+
+    @extra_op(0xED)
+    def set_5_l(self):
+        self.l = set_bit(self.l, 5).result
+
+    @extra_op(0xEE)
+    def set_5_addr_hl(self):
+        res = set_bit(self._mem.read_byte(self.hl), 5)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xEF)
+    def set_5_a(self):
+        self.a = set_bit(self.a, 5).result
+
+    @extra_op(0xF0)
+    def set_6_b(self):
+        self.b = set_bit(self.b, 6).result
+
+    @extra_op(0xF1)
+    def set_6_c(self):
+        self.c = set_bit(self.c, 6).result
+
+    @extra_op(0xF2)
+    def set_6_d(self):
+        self.d = set_bit(self.d, 6).result
+
+    @extra_op(0xF3)
+    def set_6_e(self):
+        self.e = set_bit(self.e, 6).result
+
+    @extra_op(0xF4)
+    def set_6_h(self):
+        self.h = set_bit(self.h, 6).result
+
+    @extra_op(0xF5)
+    def set_6_l(self):
+        self.l = set_bit(self.l, 6).result
+
+    @extra_op(0xF6)
+    def set_6_addr_hl(self):
+        res = set_bit(self._mem.read_byte(self.hl), 6)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xF7)
+    def set_6_a(self):
+        self.a = set_bit(self.a, 6).result
+
+    @extra_op(0xF8)
+    def set_7_b(self):
+        self.b = set_bit(self.b, 7).result
+
+    @extra_op(0xF9)
+    def set_7_c(self):
+        self.c = set_bit(self.c, 7).result
+
+    @extra_op(0xFA)
+    def set_7_d(self):
+        self.d = set_bit(self.d, 7).result
+
+    @extra_op(0xFB)
+    def set_7_e(self):
+        self.e = set_bit(self.e, 7).result
+
+    @extra_op(0xFC)
+    def set_7_h(self):
+        self.h = set_bit(self.h, 7).result
+
+    @extra_op(0xFD)
+    def set_7_l(self):
+        self.l = set_bit(self.l, 7).result
+
+    @extra_op(0xFE)
+    def set_7_addr_hl(self):
+        res = set_bit(self._mem.read_byte(self.hl), 7)
+        self._mem.write_byte(res.result, self.hl)
+
+    @extra_op(0xFF)
+    def set_7_a(self):
+        self.a = set_bit(self.a, 7).result
+
 
 ALUResult = namedtuple("ALUResult",
                        ["result", "z_flag", "n_flag", "h_flag", "c_flag"])
