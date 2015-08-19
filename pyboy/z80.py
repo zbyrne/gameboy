@@ -1700,7 +1700,7 @@ class Z80(object):
     @op_code(0xF3, 4)
     def di(self):
         # disable interrupts
-        pass
+        self.pc += 1
 
     @op_code(0xF5, 16)
     def push_af(self):
@@ -1742,7 +1742,7 @@ class Z80(object):
     @op_code(0xFB, 4)
     def ei(self):
         # enable interrupts
-        pass
+        self.pc += 1
 
     @op_code(0xFE, 8)
     def cp_d8(self):
