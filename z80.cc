@@ -1,26 +1,44 @@
 #include <cstdint>
 
-uint8_t Z_FLAG = 1 << 7;
-uint8_t N_FLAG = 1 << 6;
-uint8_t H_FLAG = 1 << 5;
-uint8_t C_FLAG = 1 << 4;
-
-using reg_16_8_map =
-    union {
-        uint16_t reg16;
-        struct {
-            uint8_t hi;
-            uint8_t low;
-        } reg8;
-    };
+const uint8_t Z_FLAG = 1 << 7;
+const uint8_t N_FLAG = 1 << 6;
+const uint8_t H_FLAG = 1 << 5;
+const uint8_t C_FLAG = 1 << 4;
 
 class Z80 {
-    reg_16_8_map af, bc, de, hl;
+    union {
+        uint16_t reg_af;
+        struct {
+            uint8_t reg_a;
+            uint8_t reg_f;
+        };
+    };
+    union {
+        uint16_t reg_bc;
+        struct {
+            uint8_t reg_b;
+            uint8_t reg_c;
+        };
+    };
+    union {
+        uint16_t reg_de;
+        struct {
+            uint8_t reg_d;
+            uint8_t reg_e;
+        };
+    };
+    union {
+        uint16_t reg_hl;
+        struct {
+            uint8_t reg_h;
+            uint8_t reg_l;
+        };
+    };
     uint16_t pc;
     uint8_t add_8bit(uint8_t& a, uint8_t b, uint8_t c);
     uint8_t sub_8bit(uint8_t& a, uint8_t b, uint8_t c);
 public:
-    Z80() : pc(0) { af.reg16=0; bc.reg16=0, de.reg16=0; hl.reg16=0; }
+    Z80() : pc(0) { reg_af=0; reg_bc=0; reg_de=0; reg_hl=0; }
 };
 
 uint8_t
