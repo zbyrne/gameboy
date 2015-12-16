@@ -38,7 +38,7 @@ class Z80 {
     uint8_t add_8bit(uint8_t& a, uint8_t b, uint8_t c);
     uint8_t sub_8bit(uint8_t& a, uint8_t b, uint8_t c);
 public:
-    Z80() : pc(0), reg_af(0), reg_bc(0), reg_de(0), reg_hl(0) {}
+    Z80() : reg_af(0), reg_bc(0), reg_de(0), reg_hl(0), pc(0) {}
 };
 
 uint8_t
