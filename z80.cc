@@ -1,9 +1,9 @@
 #include <cstdint>
 
-const uint8_t Z_FLAG = 1 << 7;
-const uint8_t N_FLAG = 1 << 6;
-const uint8_t H_FLAG = 1 << 5;
-const uint8_t C_FLAG = 1 << 4;
+constexpr uint8_t Z_FLAG = 1 << 7;
+constexpr uint8_t N_FLAG = 1 << 6;
+constexpr uint8_t H_FLAG = 1 << 5;
+constexpr uint8_t C_FLAG = 1 << 4;
 
 class Z80 {
     union {
