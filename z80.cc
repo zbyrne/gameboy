@@ -2,8 +2,18 @@
 #include "z80.h"
 
 uint8_t
+operator|(const uint8_t &a, const Flags &b) {
+    return a | static_cast<uint8_t>(b);
+}
+
+uint8_t
 operator|=(const uint8_t &a, const Flags &b) {
     return a | static_cast<uint8_t>(b);
+}
+
+uint8_t
+operator~(const Flags &a) {
+    return ~static_cast<uint8_t>(a);
 }
 
 uint8_t
