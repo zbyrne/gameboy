@@ -2,7 +2,13 @@
 #ifndef Z80_H
 #define Z80_H
 
-enum class Flags { C_FLAG = 1<< 4, H_FLAG = 1 << 5, N_FLAG = 1 << 6, Z_FLAG = 1 << 7 };
+enum class Flags {
+    CLEAR = 0,
+    C_FLAG = 1 << 4,
+    H_FLAG = 1 << 5,
+    N_FLAG = 1 << 6,
+    Z_FLAG = 1 << 7
+};
 
 class Z80 {
     union {
