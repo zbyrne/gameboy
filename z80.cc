@@ -19,5 +19,5 @@ Z80::add_8bit(uint8_t& a, uint8_t b, uint8_t c) {
 
 uint8_t
 Z80::sub_8bit(uint8_t& a, uint8_t b, uint8_t c) {
-    return this->add_8bit(a, -b, c);
+    return this->add_8bit(a, -b, c) | Flags::N_FLAG;
 }
