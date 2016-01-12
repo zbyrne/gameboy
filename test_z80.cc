@@ -3,7 +3,8 @@
 
 int main() {
     auto z = Z80();
-    z.z_flag = 1;
-    std::cout << z.reg_af << std::endl;
+    z.reg_b = 4;
+    z.add_a_b();
+    std::cout << static_cast<uint32_t>(z.reg_a) << std::endl;
     return 0;
 }

@@ -43,6 +43,7 @@ struct Z80 {
     uint16_t pc;
     Z80() : reg_af(0), reg_bc(0), reg_de(0), reg_hl(0), pc(0) {}
 
+    void adc_8bit(uint8_t &, uint8_t, uint8_t);
     uint8_t add_a_b();
     uint8_t add_a_c();
     uint8_t add_a_d();
